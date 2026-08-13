@@ -7,7 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
+import androidx.compose.animation.ContentTransform
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -174,10 +174,13 @@ fun OnboardingScreen(onComplete: () -> Unit) {
                 AnimatedContent(
                     targetState = page,
                     transitionSpec = {
-                        (slideInVertically(tween(Motion.Normal, easing = Motion.Decode)) { it / 5 } +
-                            fadeIn(tween(Motion.Normal))) togetherWith
-                            (slideOutVertically(tween(Motion.Fast)) { -it / 6 } +
-                                fadeOut(tween(Motion.Fast)))
+                        ContentTransform(
+                            targetContentEnter = slideInVertically(
+                                tween(Motion.Normal, easing = Motion.Decode)
+                            ) { it / 5 } + fadeIn(tween(Motion.Normal)),
+                            initialContentExit = slideOutVertically(tween(Motion.Fast)) { -it / 6 } +
+                                fadeOut(tween(Motion.Fast))
+                        )
                     },
                     label = "onboardPage"
                 ) { index ->

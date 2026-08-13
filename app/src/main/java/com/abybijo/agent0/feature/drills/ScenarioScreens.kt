@@ -5,7 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.togetherWith
+import androidx.compose.animation.ContentTransform
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -161,8 +161,12 @@ fun ScenarioScreen(
             AnimatedContent(
                 targetState = stepId,
                 transitionSpec = {
-                    (slideInVertically(tween(Motion.Normal, easing = Motion.Decode)) { it / 6 } +
-                        fadeIn(tween(Motion.Normal))) togetherWith fadeOut(tween(Motion.Fast))
+                    ContentTransform(
+                        targetContentEnter = slideInVertically(
+                            tween(Motion.Normal, easing = Motion.Decode)
+                        ) { it / 6 } + fadeIn(tween(Motion.Normal)),
+                        initialContentExit = fadeOut(tween(Motion.Fast))
+                    )
                 },
                 label = "scenarioStep"
             ) { current ->
