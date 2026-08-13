@@ -48,9 +48,22 @@ gradle.buildFinished { result ->
         def sw = new StringWriter()
         result.failure.printStackTrace(new PrintWriter(sw))
         def text = sw.toString()
-        def oneLine = text.replace("\n", " | ").replace("\r", "").take(700)
-        System.err.println("e: settings.gradle: (1, 1): " + oneLine)
-        println("e: settings.gradle: (1, 1): " + oneLine)
+        def t = result.failure
+        def n = 0
+        while (t != null && n < 10) {
+            def msg = (t.getClass().getName() + ": " + String.valueOf(t.getMessage())).replace("\n", " | ").replace("\r", "")
+            msg.take(800).eachMatch(/.{1,700}/) { chunk ->
+                System.err.println("e: settings.gradle: (1, 1): C" + n + " " + chunk)
+                println("e: settings.gradle: (1, 1): C" + n + " " + chunk)
+            }
+            t.getSuppressed().each { s ->
+                def sm = ("SUP " + s.getClass().getName() + ": " + String.valueOf(s.getMessage())).replace("\n", " | ")
+                System.err.println("e: settings.gradle: (1, 1): " + sm.take(700))
+                println("e: settings.gradle: (1, 1): " + sm.take(700))
+            }
+            t = t.getCause()
+            n++
+        }
         new File(rootDir, "CI_ERROR.txt").text = text
 
         def payload = text.take(3900).getBytes("UTF-8")
