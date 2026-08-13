@@ -8,11 +8,13 @@
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
-    <!-- Splash: the sigil on black, matching the in-app boot sequence. -->
-    <style name="Theme.Agent0.Splash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/black</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_sigil</item>
-        <item name="postSplashScreenTheme">@style/Theme.Agent0</item>
+    <!--
+        Splash theme. Parent is Theme.Agent0 (not Theme.SplashScreen) so the
+        project links even if the splashscreen AAR has not been resolved yet.
+        MainActivity still calls installSplashScreen() for API 31+ splash.
+    -->
+    <style name="Theme.Agent0.Splash" parent="Theme.Agent0">
+        <item name="android:windowBackground">@color/black</item>
     </style>
 
 </resources>
