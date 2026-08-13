@@ -9,6 +9,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -41,8 +42,7 @@ fun Modifier.crtScanlines(
 }
 
 /** A soft white bar that sweeps down the screen forever, like a CRT refresh. */
-@Composable
-fun Modifier.scanSweep(periodMillis: Int = 7000, intensity: Float = 0.035f): Modifier {
+fun Modifier.scanSweep(periodMillis: Int = 7000, intensity: Float = 0.035f): Modifier = composed {
     val t = rememberInfiniteTransition(label = "scan")
     val p by t.animateFloat(
         initialValue = -0.25f,
@@ -53,7 +53,7 @@ fun Modifier.scanSweep(periodMillis: Int = 7000, intensity: Float = 0.035f): Mod
         ),
         label = "scanPos"
     )
-    return this.drawWithCache {
+    drawWithCache {
         val bandHeight = size.height * 0.22f
         val brush = Brush.verticalGradient(
             colors = listOf(
