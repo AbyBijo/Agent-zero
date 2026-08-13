@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">Agent-0</string>
-    <string name="app_tagline">OPSEC Training Program</string>
-    <string name="rule_one">You don\'t talk about this.</string>
-</resources>
