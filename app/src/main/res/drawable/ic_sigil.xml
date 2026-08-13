@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Agent-0 sigil — vector, monochrome, no raster assets.
+    Mirrors the Compose-drawn mark in ui/components/Logo.kt:
+    outer ring, inner ring, shield, keyhole, cardinal reticle ticks.
+    Canvas is 108x108 so it doubles as the adaptive-icon foreground.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- outer ring -->
+    <path
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="2.6"
+        android:fillColor="#00000000"
+        android:pathData="M54,20 A34,34 0 1,1 53.99,20 Z" />
+
+    <!-- inner ring -->
+    <path
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="1.4"
+        android:fillColor="#00000000"
+        android:pathData="M54,27 A27,27 0 1,1 53.99,27 Z" />
+
+    <!-- cardinal reticle ticks -->
+    <path android:fillColor="#FFFFFFFF" android:pathData="M53,12 h2 v7 h-2 z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M53,89 h2 v7 h-2 z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M12,53 h7 v2 h-7 z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M89,53 h7 v2 h-7 z" />
+
+    <!-- shield -->
+    <path
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="2.4"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000"
+        android:pathData="M38,37 L70,37 L70,49 C70,60 63,68 54,73 C45,68 38,60 38,49 Z" />
+
+    <!-- chief bar -->
+    <path android:fillColor="#FFFFFFFF" android:pathData="M38,44.2 h32 v1.8 h-32 z" />
+
+    <!-- keyhole ring -->
+    <path
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="2.4"
+        android:fillColor="#00000000"
+        android:pathData="M54,50 m-5,0 a5,5 0 1,1 10,0 a5,5 0 1,1 -10,0" />
+
+    <!-- keyhole stem -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M51.6,55 L56.4,55 L55.4,64 L52.6,64 Z" />
+
+</vector>

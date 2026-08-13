@@ -1,0 +1,44 @@
+name: Build Agent-0 APK
+
+# Builds a debug APK in the cloud and attaches it as a downloadable artifact.
+# Run it from your phone: GitHub → Actions → "Build Agent-0 APK" → Run workflow.
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Assemble debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      # Uses a pinned Gradle directly, so no gradle-wrapper.jar is required
+      # in the repository.
+      - name: Set up Gradle 8.7
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Assemble debug APK
+        run: gradle assembleDebug --no-daemon --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Agent-0-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
