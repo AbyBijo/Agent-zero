@@ -6,6 +6,7 @@ plugins {
 android {
     namespace = "com.abybijo.agent0"
     compileSdk = 34
+    buildToolsVersion = "34.0.0"
 
     defaultConfig {
         applicationId = "com.abybijo.agent0"
