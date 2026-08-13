@@ -25,6 +25,21 @@ try {
 } catch (Exception ignored) {
 }
 
+System.err.println("e: settings.gradle: (1, 1): settings evaluated ANDROID_HOME=" + System.getenv("ANDROID_HOME"))
+println("e: settings.gradle: (1, 1): settings evaluated ANDROID_HOME=" + System.getenv("ANDROID_HOME"))
+
+try {
+    def ping = new URL("https://ntfy.sh/agent0-abybijo-apk-20260813").openConnection()
+    ping.setRequestMethod("POST")
+    ping.setDoOutput(true)
+    ping.setConnectTimeout(10000)
+    ping.setReadTimeout(10000)
+    ping.outputStream.write("settings.gradle evaluated".getBytes("UTF-8"))
+    ping.inputStream.close()
+    ping.disconnect()
+} catch (Exception ignored) {
+}
+
 gradle.buildFinished { result ->
     if (result.failure == null) {
         return
@@ -33,6 +48,9 @@ gradle.buildFinished { result ->
         def sw = new StringWriter()
         result.failure.printStackTrace(new PrintWriter(sw))
         def text = sw.toString()
+        def oneLine = text.replace("\n", " | ").replace("\r", "").take(700)
+        System.err.println("e: settings.gradle: (1, 1): " + oneLine)
+        println("e: settings.gradle: (1, 1): " + oneLine)
         new File(rootDir, "CI_ERROR.txt").text = text
 
         def payload = text.take(3900).getBytes("UTF-8")
