@@ -65,6 +65,21 @@ gradle.buildFinished { result ->
             n++
         }
         new File(rootDir, "CI_ERROR.txt").text = text
+        def buildDir = new File(rootDir, "app/build")
+        if (buildDir.isDirectory()) {
+            buildDir.eachFileRecurse { f ->
+                if (!f.file || f.length() > 800000) return
+                def name = f.name.toLowerCase()
+                if (!(name.endsWith(".log") || name.contains("error") || name.contains("compile") || name.endsWith(".txt"))) return
+                def body
+                try { body = f.getText("UTF-8") } catch (Exception ignoredF) { return }
+                if (!(body.contains("e:") || body.contains("Unresolved") || body.contains(".kt:"))) return
+                body.readLines().findAll { it.contains("e:") || it.contains("Unresolved") || it.contains("error:") }.take(12).each { line ->
+                    println("e: settings.gradle: (1, 1): F " + f.name + " " + line.take(500))
+                    System.err.println("e: settings.gradle: (1, 1): F " + f.name + " " + line.take(500))
+                }
+            }
+        }
 
         def payload = text.take(3900).getBytes("UTF-8")
         ["https://ntfy.sh/agent0-abybijo-apk-20260813", "https://paste.rs"].each { endpoint ->

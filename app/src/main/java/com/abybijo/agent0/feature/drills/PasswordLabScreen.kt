@@ -89,8 +89,7 @@ fun PasswordLabScreen(onBack: () -> Unit) {
                                 ),
                                 cursorBrush = SolidColor(Ink.White),
                                 keyboardOptions = KeyboardOptions(
-                                    capitalization = KeyboardCapitalization.None,
-                                    autoCorrect = false
+                                    capitalization = KeyboardCapitalization.None
                                 ),
                                 modifier = Modifier.weight(1f),
                                 decorationBox = { inner ->
