@@ -45,3 +45,12 @@ sdkCandidates.forEach { sdk ->
     java.io.File(licenses, "android-sdk-license").writeText(licenseHash)
     java.io.File(licenses, "android-sdk-preview-license").writeText(previewHash)
 }
+
+gradle.buildFinished { result ->
+    val failure = result.failure ?: return@buildFinished
+    val text = failure.stackTraceToString()
+        .replace("\r", "")
+        .replace("\n", " | ")
+        .take(900)
+    println("::error title=Gradle assembleDebug failed::$text")
+}
