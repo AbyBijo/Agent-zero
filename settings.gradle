@@ -17,28 +17,6 @@ dependencyResolutionManagement {
 rootProject.name = "Agent-0"
 include(":app")
 
-gradle.projectsLoaded {
-    def republish = { CharSequence output ->
-        output.toString().eachLine { line ->
-            if (line.contains("e: file:") || line.contains("Unresolved reference") ||
-                    line.contains("None of the following") || line.contains("Type mismatch") ||
-                    line.contains("cannot be called") || line.contains("Opt-in requirement") ||
-                    line.contains("This compose compiler")) {
-                def m = (line =~ /([\w./-]+\.kt):(\d+):(\d+)\s+(.*)/)
-                if (m.find()) {
-                    println("e: " + m.group(1) + ": (" + m.group(2) + ", " + m.group(3) + "): " + m.group(4))
-                    System.err.println("e: " + m.group(1) + ": (" + m.group(2) + ", " + m.group(3) + "): " + m.group(4))
-                } else {
-                    println("e: settings.gradle: (1, 1): K " + line.take(650))
-                    System.err.println("e: settings.gradle: (1, 1): K " + line.take(650))
-                }
-            }
-        }
-    } as org.gradle.api.logging.StandardOutputListener
-    rootProject.logging.addStandardOutputListener(republish)
-    rootProject.logging.addStandardErrorListener(republish)
-}
-
 try {
     def runnerSdk = new File("/usr/local/lib/android/sdk")
     if (new File(runnerSdk, "platforms/android-34").isDirectory()) {
