@@ -85,13 +85,15 @@ cd Agent-0
 Open the folder in Android Studio and press **Run**. Gradle syncs and
 regenerates the wrapper automatically.
 
-Command line (once the wrapper JAR exists — see `gradle/wrapper/README.txt`):
+Command line:
 
 ```bash
 ./gradlew assembleDebug      # APK → app/build/outputs/apk/debug/
 ./gradlew installDebug       # build + install to a connected device
 ./gradlew assembleRelease    # minified + resource-shrunk release build
 ```
+
+Or let GitHub Actions build it: **Actions → Build Agent-0 APK → Run workflow**, then download the **Agent-0-debug-apk** artifact.
 
 | Setting | Value |
 |---|---|

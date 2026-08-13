@@ -1,9 +1,8 @@
-The Gradle wrapper JAR (gradle-wrapper.jar) is a binary and is not included
-in this source distribution.
+Gradle wrapper for Agent-0.
 
-Android Studio regenerates it automatically when you open the project.
-To create it manually with a local Gradle install:
+    ./gradlew assembleDebug      # debug APK
+    ./gradlew assembleRelease    # release APK
 
-    gradle wrapper --gradle-version 8.7
-
-After that, ./gradlew will work as normal.
+The wrapper scripts (gradlew / gradlew.bat) and gradle-wrapper.jar are
+committed so CI and local machines can build without a preinstalled Gradle.
+They download Gradle 8.7 from services.gradle.org on first use.

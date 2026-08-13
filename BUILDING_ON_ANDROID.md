@@ -82,8 +82,8 @@ repo already contains the workflow at `.github/workflows/build.yml`.
    **Agent-0-debug-apk**.
 5. Unzip on your phone and install the APK (allow "install unknown apps").
 
-The workflow uses a pinned Gradle 8.7 directly, so the missing
-`gradle-wrapper.jar` is not a problem.
+The repo now ships the Gradle wrapper (`gradlew` + `gradle-wrapper.jar`),
+so the workflow just runs `./gradlew assembleDebug`.
 
 ---
 
