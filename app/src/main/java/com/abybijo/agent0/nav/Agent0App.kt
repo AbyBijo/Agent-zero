@@ -25,8 +25,11 @@ import androidx.navigation.navArgument
 import androidx.navigation.NavType
 import com.abybijo.agent0.AppViewModel
 import com.abybijo.agent0.Progress
+import com.abybijo.agent0.feature.about.AboutDeveloperScreen
 import com.abybijo.agent0.feature.about.AboutScreen
 import com.abybijo.agent0.feature.about.SettingsScreen
+import com.abybijo.agent0.feature.profile.ProfileScreen
+import com.abybijo.agent0.feature.profile.TourScreen
 import com.abybijo.agent0.feature.chapters.BriefScreen
 import com.abybijo.agent0.feature.chapters.ChapterDetailScreen
 import com.abybijo.agent0.feature.chapters.ChaptersScreen
@@ -176,6 +179,26 @@ private fun Agent0NavHost(
         composable(Route.ABOUT) {
             AboutScreen(onNavigate = { nav.navigate(it) })
         }
+        composable(Route.PROFILE) {
+            ProfileScreen(
+                progress = progress,
+                onNavigate = { nav.navigate(it) },
+                onOpenBrief = { c, b -> nav.navigate(Route.brief(c, b)) },
+                onToggleBookmark = { viewModel.toggleBookmark(it) },
+                onUserName = { viewModel.setUserName(it) },
+                onUserAge = { viewModel.setUserAge(it) },
+                onAvatarId = { viewModel.setAvatarId(it) }
+            )
+        }
+        composable(Route.TOUR) {
+            TourScreen(
+                onBack = { nav.popBackStack() },
+                onComplete = { viewModel.setTourCompleted(true) }
+            )
+        }
+        composable(Route.ABOUT_DEVELOPER) {
+            AboutDeveloperScreen(onBack = { nav.popBackStack() })
+        }
 
         composable(
             Route.CHAPTER_DETAIL,
@@ -286,6 +309,10 @@ private fun Agent0NavHost(
                 onReduceMotion = { viewModel.setReduceMotion(it) },
                 onScanlines = { viewModel.setScanlines(it) },
                 onUserName = { viewModel.setUserName(it) },
+                onUserAge = { viewModel.setUserAge(it) },
+                onAbout = { nav.navigate(Route.ABOUT) },
+                onAboutDeveloper = { nav.navigate(Route.ABOUT_DEVELOPER) },
+                onTour = { nav.navigate(Route.TOUR) },
                 onWipe = { viewModel.wipe() }
             )
         }

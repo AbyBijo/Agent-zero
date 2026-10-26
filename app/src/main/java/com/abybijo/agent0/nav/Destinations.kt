@@ -10,6 +10,9 @@ object Route {
     const val DRILLS = "drills"
     const val INTEL = "intel"
     const val ABOUT = "about"
+    const val PROFILE = "profile"
+    const val TOUR = "tour"
+    const val ABOUT_DEVELOPER = "about-developer"
 
     const val CHAPTER_DETAIL = "chapter/{chapterId}"
     fun chapterDetail(id: String) = "chapter/$id"
@@ -42,5 +45,5 @@ enum class Tab(val route: String, val label: String, val glyph: String) {
     CHAPTERS(Route.CHAPTERS, "Train", "\u2630"),
     DRILLS(Route.DRILLS, "Drills", "\u2317"),
     INTEL(Route.INTEL, "Intel", "\u25F1"),
-    ABOUT(Route.ABOUT, "About", "\u2139")
+    PROFILE(Route.PROFILE, "Profile", "\u25CE")
 }

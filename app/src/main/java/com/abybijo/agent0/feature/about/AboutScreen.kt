@@ -1,10 +1,5 @@
 package com.abybijo.agent0.feature.about
 
-import android.content.Intent
-import android.net.Uri
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,8 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.abybijo.agent0.data.Cases
 import com.abybijo.agent0.data.Checklists
@@ -32,7 +25,6 @@ import com.abybijo.agent0.data.Scenarios
 import com.abybijo.agent0.nav.Route
 import com.abybijo.agent0.ui.components.Agent0Logo
 import com.abybijo.agent0.ui.components.Agent0Screen
-import com.abybijo.agent0.ui.components.DashRule
 import com.abybijo.agent0.ui.components.Eyebrow
 import com.abybijo.agent0.ui.components.Panel
 import com.abybijo.agent0.ui.components.RevealIn
@@ -55,29 +47,6 @@ object Credits {
 
 @Composable
 fun AboutScreen(onNavigate: (String) -> Unit) {
-    val context = LocalContext.current
-
-    val openUrl: (String) -> Unit = { url ->
-        runCatching {
-            context.startActivity(
-                Intent.createChooser(Intent(Intent.ACTION_VIEW, Uri.parse(url)), "Open link")
-            )
-        }
-    }
-    val sendMail: (String) -> Unit = { address ->
-        runCatching {
-            context.startActivity(
-                Intent.createChooser(
-                    Intent(Intent.ACTION_SENDTO).apply {
-                        data = Uri.parse("mailto:$address")
-                        putExtra(Intent.EXTRA_SUBJECT, "Agent-0 feedback")
-                    },
-                    "Send email"
-                )
-            )
-        }
-    }
-
     Agent0Screen(
         title = "About",
         eyebrow = "Agent-0 \u00B7 v${Credits.VERSION}",
@@ -119,64 +88,20 @@ fun AboutScreen(onNavigate: (String) -> Unit) {
             Spacer(Modifier.height(32.dp))
         }
 
-        // ── with love ─────────────────────────────────────────────────
-        item {
-            RevealIn(delayMillis = 80) {
-                Panel {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            "With love",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Ink.Mid
-                        )
-                        Spacer(Modifier.height(6.dp))
-                        Text(
-                            "By ${Credits.AUTHOR}",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Ink.White,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                    Spacer(Modifier.height(14.dp))
-                    DashRule()
-                    Spacer(Modifier.height(14.dp))
-                    // Icon-only links: GitHub, official email, website.
-                    // The academic email is intentionally not shown here.
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        IconLink(label = "GH", onClick = { openUrl(Credits.GITHUB) })
-                        Spacer(Modifier.width(12.dp))
-                        IconLink(label = "@", onClick = { sendMail(Credits.EMAIL_PRIMARY) })
-                        Spacer(Modifier.width(12.dp))
-                        IconLink(label = "\u2302", onClick = { openUrl(Credits.WEBSITE) })
-                    }
-                    Spacer(Modifier.height(16.dp))
-                    com.abybijo.agent0.ui.components.PrimaryButton(
-                        text = "Buy me a coffee",
-                        leading = "\u2615",
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { openUrl(Credits.BUY_ME_A_COFFEE) }
-                    )
-                }
-            }
-            Spacer(Modifier.height(14.dp))
-        }
-
         // ── free ──────────────────────────────────────────────────────
+        // v2.0: developer details and contacts moved to About Developer
+        // (Settings). This page is about the app only.
         item {
             RevealIn(delayMillis = 130) {
                 Panel(background = Ink.Void) {
                     Eyebrow("No payment. Ever.")
                     Spacer(Modifier.height(10.dp))
                     Text(
-                        "Every chapter, drill, case file and reference is unlocked. There " +
-                            "are no purchases, no subscriptions, no ads, no accounts and no " +
-                            "analytics. Security education behind a paywall protects nobody.",
+                        "Every chapter, drill, case file and reference is included. " +
+                            "Content unlocks by completing the previous brief, never by " +
+                            "payment. There are no purchases, no subscriptions, no ads, " +
+                            "no accounts and no analytics. Security education behind a " +
+                            "paywall protects nobody.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = Ink.Soft
                     )
@@ -311,24 +236,5 @@ fun AboutScreen(onNavigate: (String) -> Unit) {
                 }
             }
         }
-    }
-}
-
-/** Small bordered icon link used for the developer contact row. */
-@Composable
-private fun IconLink(label: String, onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(2.dp))
-            .border(BorderStroke(1.dp, Ink.Rule), RoundedCornerShape(2.dp))
-            .noRippleClickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            label,
-            style = MaterialTheme.typography.titleMedium,
-            color = Ink.White
-        )
     }
 }

@@ -53,10 +53,15 @@ fun SettingsScreen(
     onReduceMotion: (Boolean) -> Unit,
     onScanlines: (Boolean) -> Unit,
     onUserName: (String) -> Unit,
+    onUserAge: (Int?) -> Unit = {},
+    onAbout: () -> Unit = {},
+    onAboutDeveloper: () -> Unit = {},
+    onTour: () -> Unit = {},
     onWipe: () -> Unit
 ) {
     var confirmWipe by remember { mutableStateOf(false) }
     var nameDraft by remember { mutableStateOf(progress.userName) }
+    var ageDraft by remember { mutableStateOf(progress.userAge?.toString() ?: "") }
 
     Agent0Screen(title = "Settings", eyebrow = "Local configuration", onBack = onBack) {
         item {
@@ -97,6 +102,68 @@ fun SettingsScreen(
                         text = "Save name",
                         enabled = nameDraft.isNotBlank() && nameDraft != progress.userName,
                         onClick = { onUserName(nameDraft) }
+                    )
+                    Spacer(Modifier.height(14.dp))
+                    Text(
+                        "Age is shown on your Profile page only. It never changes what you can learn.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Ink.Mid
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    OutlinedTextField(
+                        value = ageDraft,
+                        onValueChange = { ageDraft = it.filter { c -> c.isDigit() }.take(3) },
+                        singleLine = true,
+                        placeholder = {
+                            Text(
+                                "Age (display only)",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Ink.Dim
+                            )
+                        },
+                        textStyle = MaterialTheme.typography.bodyMedium.copy(color = Ink.White),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedIndicatorColor = Ink.White,
+                            unfocusedIndicatorColor = Ink.Rule,
+                            cursorColor = Ink.White
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    GhostButton(
+                        text = "Save age",
+                        enabled = ageDraft.toIntOrNull()?.takeIf { it in 1..120 } != progress.userAge,
+                        onClick = { onUserAge(ageDraft.toIntOrNull()?.takeIf { it in 1..120 }) }
+                    )
+                }
+            }
+            Spacer(Modifier.height(14.dp))
+        }
+
+        item {
+            Spacer(Modifier.height(14.dp))
+            RevealIn {
+                Panel {
+                    Eyebrow("About & tour")
+                    Spacer(Modifier.height(12.dp))
+                    GhostButton(
+                        text = "About the app",
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = onAbout
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    GhostButton(
+                        text = "About Developer",
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = onAboutDeveloper
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    GhostButton(
+                        text = "Replay guided tour",
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = onTour
                     )
                 }
             }
