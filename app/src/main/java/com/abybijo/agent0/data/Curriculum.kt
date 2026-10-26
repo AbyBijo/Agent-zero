@@ -69,27 +69,28 @@ private fun chapter00() = Chapter(
     title = "Orientation",
     glyph = "\u25C8",
     tier = Tier.BEGINNER,
-    tagline = "The rules, the mindset, and how to use this program.",
+    tagline = "The rule, the practices, the mindset, and how to use this program.",
     briefs = listOf(
         Brief(
             id = "rules",
             title = "The Rules",
             glyph = "\u2691",
-            summary = "Five rules that govern everything that follows.",
+            // v2.0 Rule 1 only (SRS §9.5): one Rule, four practices.
+            summary = "One rule, and four practices that govern everything that follows.",
             minutes = 4,
             blocks = listOf(
                 Block.Para(
                     "Operational security is not a product you install. It is a habit of " +
-                        "deciding, deliberately, who gets to know what. These five rules are " +
-                        "the spine of the program."
+                        "deciding, deliberately, who gets to know what. One rule and four " +
+                        "practices are the spine of the program."
                 ),
                 Block.Terminal(
                     listOf(
                         "RULE 01  You don't talk about this.",
-                        "RULE 02  You are not too small to be a target.",
-                        "RULE 03  Perfect security does not exist. Acceptable risk does.",
-                        "RULE 04  Convenience you didn't choose is a decision made for you.",
-                        "RULE 05  Assume breach. Plan for detection and recovery."
+                        "PRACTICE 02  You are not too small to be a target.",
+                        "PRACTICE 03  Perfect security does not exist. Acceptable risk does.",
+                        "PRACTICE 04  Convenience you didn't choose is a decision made for you.",
+                        "PRACTICE 05  Assume breach. Plan for detection and recovery."
                     )
                 ),
                 Block.Heading("Rule 01 in practice", "\u25B8"),
@@ -115,7 +116,7 @@ private fun chapter00() = Chapter(
                         "pretext against support staff. The technical exploit was trivial; the " +
                         "reconnaissance was free."
                 ),
-                Block.Heading("Rule 02: the myth of the small target", "\u25B8"),
+                Block.Heading("Practice 02: the myth of the small target", "\u25B8"),
                 Block.Para(
                     "Most attacks are not personal. They are automated sweeps that test " +
                         "millions of credentials against thousands of sites. You are not " +
@@ -123,13 +124,13 @@ private fun chapter00() = Chapter(
                         "(unique passwords, 2FA, updates) removes the overwhelming majority " +
                         "of real-world risk."
                 ),
-                Block.Heading("Rule 03: risk, not perfection", "\u25B8"),
+                Block.Heading("Practice 03: risk, not perfection", "\u25B8"),
                 Block.Para(
                     "Any security control costs something: money, time, or friction. A " +
                         "control so painful you abandon it in a week has negative value. The " +
                         "goal is the strongest posture you will actually sustain."
                 ),
-                Block.Heading("Rules 04 and 05", "\u25B8"),
+                Block.Heading("Practices 04 and 05", "\u25B8"),
                 Block.Para(
                     "Defaults are decisions someone else made about your data. Review them. " +
                         "And assume that eventually something you rely on will be breached — " +

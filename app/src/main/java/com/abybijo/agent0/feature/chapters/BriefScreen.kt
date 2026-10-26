@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.abybijo.agent0.Progress
+import com.abybijo.agent0.data.BriefTemplates
 import com.abybijo.agent0.data.Curriculum
 import com.abybijo.agent0.ui.components.Agent0Screen
 import com.abybijo.agent0.ui.components.CheckGlyph
@@ -131,6 +132,17 @@ fun BriefScreen(
         }
     }
 
+    // v2.0 brief template (SRS §6): a brief's own fields win, otherwise
+    // the Phase 3 template map supplies the sections. Additive only.
+    val templateFallback = BriefTemplates.forKey(key)
+    val templateSections = listOf(
+        "Outcomes \u00B7 after this brief, you will be able to" to
+            brief.outcomes.ifEmpty { templateFallback?.outcomes ?: emptyList() },
+        "How to" to brief.howTo.ifEmpty { templateFallback?.howTo ?: emptyList() },
+        "Best practices" to brief.bestPractices.ifEmpty { templateFallback?.bestPractices ?: emptyList() },
+        "Cautions" to brief.cautions.ifEmpty { templateFallback?.cautions ?: emptyList() }
+    ).filter { it.second.isNotEmpty() }
+
     val nextKey = remember(key) { Curriculum.nextKey(key) }
     val next = nextKey?.split("/")?.let { (c, b) ->
         Curriculum.chapter(c)?.let { ch -> ch to ch.briefs.first { it.id == b } }
@@ -193,6 +205,38 @@ fun BriefScreen(
         itemsIndexed(brief.blocks) { i, block ->
             RevealIn(delayMillis = 150 + (i.coerceAtMost(10) * 40)) {
                 BlockView(block = block, onOpenUrl = openUrl)
+            }
+        }
+
+        // ── v2.0 brief template ───────────────────────────────────────
+        if (templateSections.isNotEmpty()) {
+            item {
+                Spacer(Modifier.height(18.dp))
+                RevealIn {
+                    Panel(background = Ink.Void) {
+                        templateSections.forEachIndexed { i, (heading, items) ->
+                            if (i > 0) {
+                                Spacer(Modifier.height(14.dp))
+                                DashRule()
+                                Spacer(Modifier.height(14.dp))
+                            }
+                            Eyebrow(heading)
+                            Spacer(Modifier.height(8.dp))
+                            items.forEach { text ->
+                                Row {
+                                    Text("\u2014 ", color = Ink.Dim)
+                                    Text(
+                                        text,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = Ink.Mid,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                }
+                                Spacer(Modifier.height(6.dp))
+                            }
+                        }
+                    }
+                }
             }
         }
 
