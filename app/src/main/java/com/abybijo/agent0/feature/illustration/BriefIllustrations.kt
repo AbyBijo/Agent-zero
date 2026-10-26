@@ -125,7 +125,18 @@ object BriefIllustrations {
         "travel/travel-surveillance" to BriefIllustrationSpec(Motif.EYE, "Calm, specific, and actionable."),
         "travel/travel-device-taken" to BriefIllustrationSpec(Motif.WARNING, "A returned device is not a trusted device."),
         "travel/travel-return-home" to BriefIllustrationSpec(Motif.SCALE, "The trip ends when you close it."),
-        "travel/travel-routine" to BriefIllustrationSpec(Motif.HOURGLASS, "A habit is a checklist used on every trip.")
+        "travel/travel-routine" to BriefIllustrationSpec(Motif.HOURGLASS, "A habit is a checklist used on every trip."),
+        // ── CH-15 Capstone (Phase 4c, first batch) ───────────────────
+        "capstone/cap-daily" to BriefIllustrationSpec(Motif.HOURGLASS, "Small and kept beats complete and abandoned."),
+        "capstone/cap-reviews" to BriefIllustrationSpec(Motif.BOOK, "A review on a calendar happens."),
+        "capstone/cap-stress" to BriefIllustrationSpec(Motif.SHIELD, "Safe must be easy."),
+        "capstone/cap-burnout" to BriefIllustrationSpec(Motif.CIRCLE, "A posture that fits a life survives that life."),
+        "capstone/cap-updating" to BriefIllustrationSpec(Motif.MAP, "A threat model is a living document."),
+        "capstone/cap-teaching" to BriefIllustrationSpec(Motif.CIRCLE, "Teach principles, not cases."),
+        "capstone/cap-plan1" to BriefIllustrationSpec(Motif.KEY, "Specificity is what makes a plan actionable."),
+        "capstone/cap-plan2" to BriefIllustrationSpec(Motif.SCALE, "A plan is a cycle, not a document."),
+        "capstone/cap-scenario" to BriefIllustrationSpec(Motif.STAIRS, "In real life there is no exam, only decisions."),
+        "capstone/cap-completion" to BriefIllustrationSpec(Motif.SHIELD, "The posture you keep is the real qualification.")
     )
 
     fun forKey(key: String): BriefIllustrationSpec? = all[key]
