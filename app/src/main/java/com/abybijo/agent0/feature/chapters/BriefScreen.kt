@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import com.abybijo.agent0.Progress
 import com.abybijo.agent0.data.BriefTemplates
 import com.abybijo.agent0.data.Curriculum
+import com.abybijo.agent0.feature.illustration.BriefIllustration
+import com.abybijo.agent0.feature.illustration.BriefIllustrations
 import com.abybijo.agent0.ui.components.Agent0Screen
 import com.abybijo.agent0.ui.components.CheckGlyph
 import com.abybijo.agent0.ui.components.DashRule
@@ -199,6 +201,28 @@ fun BriefScreen(
             Spacer(Modifier.height(18.dp))
             RevealIn(delayMillis = 110) { SolidRule(color = Ink.Hairline) }
             Spacer(Modifier.height(20.dp))
+        }
+
+        // ── v2.0 illustration ─────────────────────────────────────────
+        // Runtime vector line art, one per brief (Phase 3b). Rendered
+        // before the lesson blocks, after the meta strip.
+        BriefIllustrations.forKey(key)?.let { spec ->
+            item {
+                RevealIn(delayMillis = 130) {
+                    Panel {
+                        Eyebrow("Illustration")
+                        Spacer(Modifier.height(6.dp))
+                        BriefIllustration(motif = spec.motif)
+                        Spacer(Modifier.height(6.dp))
+                        Text(
+                            spec.caption,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Ink.Mid
+                        )
+                    }
+                }
+                Spacer(Modifier.height(18.dp))
+            }
         }
 
         // ── content blocks ────────────────────────────────────────────
