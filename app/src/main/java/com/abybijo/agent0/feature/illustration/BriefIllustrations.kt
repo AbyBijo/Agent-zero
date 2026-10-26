@@ -91,7 +91,18 @@ object BriefIllustrations {
         "incident/ir-reporting" to BriefIllustrationSpec(Motif.ENVELOPE, "Early and factual beats late and complete."),
         "incident/ir-talking" to BriefIllustrationSpec(Motif.CIRCLE, "Honesty about the fact, restraint about the detail."),
         "incident/ir-recovery-checklist" to BriefIllustrationSpec(Motif.SCALE, "Recovery is a checklist decision, not a feeling."),
-        "incident/ir-after-action" to BriefIllustrationSpec(Motif.BOOK, "Review the system, not the person.")
+        "incident/ir-after-action" to BriefIllustrationSpec(Motif.BOOK, "Review the system, not the person."),
+        // ── CH-11 Team OPSEC (Phase 4b, second batch) ───────────────
+        "team/team-discipline" to BriefIllustrationSpec(Motif.CIRCLE, "A posture, not a person."),
+        "team/team-need-to-know" to BriefIllustrationSpec(Motif.KEY, "Access that matches the work, and nothing more."),
+        "team/team-shared" to BriefIllustrationSpec(Motif.CHAIN, "If you cannot revoke one person, you have no control."),
+        "team/team-onboarding" to BriefIllustrationSpec(Motif.STAIRS, "Access in, access out, in order."),
+        "team/team-meetings" to BriefIllustrationSpec(Motif.BOOK, "Notes outlive meetings."),
+        "team/team-vendors" to BriefIllustrationSpec(Motif.NETWORK, "A vendor's gap becomes your gap."),
+        "team/team-remote" to BriefIllustrationSpec(Motif.MAP, "The posture travels with the person."),
+        "team/team-managers" to BriefIllustrationSpec(Motif.SHIELD, "The manager's behaviour is the policy the team learns."),
+        "team/team-mistake" to BriefIllustrationSpec(Motif.SHIELD, "Blame is a security failure."),
+        "team/team-drills" to BriefIllustrationSpec(Motif.HOURGLASS, "A habit is a schedule, not a sentiment.")
     )
 
     fun forKey(key: String): BriefIllustrationSpec? = all[key]
