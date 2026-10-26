@@ -780,7 +780,7 @@ object Cases {
                 "Freezing credit, monitoring accounts, and requesting removal from data brokers are practical steps after an identity-data breach."
             )
         ),
-    )
+    ) + Cases09.all + Cases10.all
 
     val years: List<String> = all.map { it.year }.distinct().sortedDescending()
     val tags: List<String> = all.flatMap { it.tags }.distinct().sorted()
