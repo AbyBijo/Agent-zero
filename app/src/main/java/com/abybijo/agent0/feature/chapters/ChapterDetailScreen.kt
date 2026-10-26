@@ -105,12 +105,29 @@ fun ChapterDetailScreen(
         }
 
         itemsIndexed(chapter.briefs) { i, brief ->
+            // v2.0 locking (SRS §4): a locked brief opens its prerequisite,
+            // never its own body text (BriefScreen also guards this).
+            val accessible = progress.isBriefAccessible(chapterId, brief.id)
+            val prerequisiteKey = if (accessible) null
+                else progress.prerequisiteFor(chapterId, brief.id)
+            val prerequisiteTitle = prerequisiteKey?.split("/")?.let { (c, b) ->
+                Curriculum.brief(c, b)?.title
+            }
             RevealIn(delayMillis = 110 + i * 45) {
                 BriefRow(
                     index = i + 1,
                     brief = brief,
                     complete = progress.isBriefDone(chapterId, brief.id),
-                    onClick = { onOpenBrief(chapterId, brief.id) }
+                    locked = !accessible,
+                    prerequisiteTitle = prerequisiteTitle,
+                    onClick = {
+                        if (accessible) {
+                            onOpenBrief(chapterId, brief.id)
+                        } else if (prerequisiteKey != null) {
+                            val parts = prerequisiteKey.split("/")
+                            if (parts.size == 2) onOpenBrief(parts[0], parts[1])
+                        }
+                    }
                 )
             }
         }
@@ -118,7 +135,14 @@ fun ChapterDetailScreen(
 }
 
 @Composable
-private fun BriefRow(index: Int, brief: Brief, complete: Boolean, onClick: () -> Unit) {
+private fun BriefRow(
+    index: Int,
+    brief: Brief,
+    complete: Boolean,
+    locked: Boolean = false,
+    prerequisiteTitle: String? = null,
+    onClick: () -> Unit
+) {
     Column {
         Row(
             modifier = Modifier
@@ -145,15 +169,28 @@ private fun BriefRow(index: Int, brief: Brief, complete: Boolean, onClick: () ->
                     Text(
                         brief.title,
                         style = MaterialTheme.typography.titleMedium,
-                        color = if (complete) Ink.Mid else Ink.White
+                        color = if (locked) Ink.Dim else if (complete) Ink.Mid else Ink.White
                     )
+                    if (locked) {
+                        Spacer(Modifier.width(10.dp))
+                        Tag("LOCKED")
+                    }
                 }
                 Spacer(Modifier.height(6.dp))
-                Text(
-                    brief.summary,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Ink.Dim
-                )
+                if (locked) {
+                    Text(
+                        if (prerequisiteTitle != null) "Complete $prerequisiteTitle first."
+                        else "Complete the previous brief first.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Ink.Dim
+                    )
+                } else {
+                    Text(
+                        brief.summary,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Ink.Dim
+                    )
+                }
                 Spacer(Modifier.height(8.dp))
                 Text(
                     "${brief.minutes} MIN \u00B7 ${brief.references.size} REFS",

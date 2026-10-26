@@ -74,10 +74,18 @@ fun ChaptersScreen(
         }
 
         itemsIndexed(Curriculum.chapters) { i, chapter ->
+            // v2.0: a chapter is locked when its first brief is not
+            // accessible and no brief in it is completed yet. Opening the
+            // chapter still shows its brief list and prerequisites.
+            val firstBrief = chapter.briefs.firstOrNull()
+            val chapterLocked = firstBrief != null &&
+                !progress.isBriefAccessible(chapter.id, firstBrief.id) &&
+                progress.chapterDone(chapter.id) == 0
             RevealIn(delayMillis = 60 + i * 45) {
                 ChapterCard(
                     chapter = chapter,
                     done = progress.chapterDone(chapter.id),
+                    locked = chapterLocked,
                     onClick = { onOpenChapter(chapter.id) }
                 )
             }
@@ -87,7 +95,7 @@ fun ChaptersScreen(
 }
 
 @Composable
-private fun ChapterCard(chapter: Chapter, done: Int, onClick: () -> Unit) {
+private fun ChapterCard(chapter: Chapter, done: Int, locked: Boolean = false, onClick: () -> Unit) {
     val total = chapter.briefs.size
     val complete = done == total
 
@@ -137,6 +145,10 @@ private fun ChapterCard(chapter: Chapter, done: Int, onClick: () -> Unit) {
                 Spacer(Modifier.height(14.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Tag(chapter.tier.label, filled = complete)
+                    if (locked) {
+                        Spacer(Modifier.width(8.dp))
+                        Tag("LOCKED")
+                    }
                     Spacer(Modifier.width(8.dp))
                     Text(
                         "$done/$total",

@@ -66,6 +66,49 @@ fun BriefScreen(
         return
     }
 
+    // v2.0 locking guard (SRS §4): a locked brief shows no body text,
+    // only its prerequisite and a button to that prerequisite.
+    if (!progress.isBriefAccessible(chapterId, briefId)) {
+        val prerequisiteKey = progress.prerequisiteFor(chapterId, briefId)
+        val prerequisite = prerequisiteKey?.split("/")?.let { (c, b) ->
+            Curriculum.chapter(c)?.let { ch -> ch to ch.briefs.firstOrNull { it.id == b } }
+        }
+        Agent0Screen(title = brief.title, eyebrow = "${chapter.code} \u00B7 ${chapter.title}", onBack = onBack) {
+            item {
+                Spacer(Modifier.height(14.dp))
+                Panel(background = Ink.Void) {
+                    Eyebrow("Locked")
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        "Complete the previous brief first to unlock this brief.",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Ink.Mid
+                    )
+                    if (prerequisite != null) {
+                        Spacer(Modifier.height(12.dp))
+                        Text(
+                            "Prerequisite \u00B7 ${prerequisite.first.code} \u2014 ${prerequisite.second?.title}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Ink.White
+                        )
+                    }
+                }
+                Spacer(Modifier.height(20.dp))
+                if (prerequisite != null && prerequisite.second != null) {
+                    PrimaryButton(
+                        text = "Go to prerequisite",
+                        leading = "\u2192",
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            onOpenBrief(prerequisite.first.id, prerequisite.second!!.id)
+                        }
+                    )
+                }
+            }
+        }
+        return
+    }
+
     val key = "$chapterId/$briefId"
     val complete = key in progress.completedBriefs
     val bookmarked = key in progress.bookmarks
