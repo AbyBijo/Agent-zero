@@ -11,7 +11,6 @@ object Route {
     const val INTEL = "intel"
     const val ABOUT = "about"
     const val PROFILE = "profile"
-    const val TOUR = "tour"
     const val ABOUT_DEVELOPER = "about-developer"
 
     const val CHAPTER_DETAIL = "chapter/{chapterId}"

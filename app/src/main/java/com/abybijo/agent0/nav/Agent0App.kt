@@ -10,12 +10,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -29,7 +33,8 @@ import com.abybijo.agent0.feature.about.AboutDeveloperScreen
 import com.abybijo.agent0.feature.about.AboutScreen
 import com.abybijo.agent0.feature.about.SettingsScreen
 import com.abybijo.agent0.feature.profile.ProfileScreen
-import com.abybijo.agent0.feature.profile.TourScreen
+import com.abybijo.agent0.feature.profile.TourOverlay
+import com.abybijo.agent0.feature.profile.TourSteps
 import com.abybijo.agent0.feature.chapters.BriefScreen
 import com.abybijo.agent0.feature.chapters.ChapterDetailScreen
 import com.abybijo.agent0.feature.chapters.ChaptersScreen
@@ -92,6 +97,19 @@ private fun MainScaffold(viewModel: AppViewModel, progress: Progress) {
 
     val showBar = currentRoute in Tab.entries.map { it.route }
 
+    // v2.0 tour overlay state: -1 = not touring. Starts automatically
+    // once after onboarding (tourCompleted false); Skip/Finish record
+    // completion so it never reappears uninvited.
+    var tourStep by remember { mutableIntStateOf(if (progress.tourCompleted) -1 else 0) }
+    val closeTour = {
+        tourStep = -1
+        viewModel.setTourCompleted(true)
+    }
+    val startTour = {
+        tourStep = 0
+        nav.navigate(TourSteps.all[0].route) { launchSingleTop = true }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -100,7 +118,30 @@ private fun MainScaffold(viewModel: AppViewModel, progress: Progress) {
     ) {
         Column(Modifier.fillMaxSize()) {
             Box(Modifier.weight(1f)) {
-                Agent0NavHost(nav = nav, viewModel = viewModel, progress = progress)
+                Agent0NavHost(
+                    nav = nav,
+                    viewModel = viewModel,
+                    progress = progress,
+                    onStartTour = startTour
+                )
+                if (tourStep >= 0) {
+                    TourOverlay(
+                        stepIndex = tourStep,
+                        onBack = {
+                            tourStep--
+                            nav.navigate(TourSteps.all[tourStep].route) { launchSingleTop = true }
+                        },
+                        onNext = {
+                            tourStep++
+                            nav.navigate(TourSteps.all[tourStep].route) { launchSingleTop = true }
+                        },
+                        onSkip = closeTour,
+                        onFinish = closeTour,
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(12.dp)
+                    )
+                }
             }
             if (showBar) {
                 Box(Modifier.navigationBarsPadding()) {
@@ -124,7 +165,8 @@ private fun MainScaffold(viewModel: AppViewModel, progress: Progress) {
 private fun Agent0NavHost(
     nav: NavHostController,
     viewModel: AppViewModel,
-    progress: Progress
+    progress: Progress,
+    onStartTour: () -> Unit
 ) {
     val reduce = progress.reduceMotion
 
@@ -187,13 +229,9 @@ private fun Agent0NavHost(
                 onToggleBookmark = { viewModel.toggleBookmark(it) },
                 onUserName = { viewModel.setUserName(it) },
                 onUserAge = { viewModel.setUserAge(it) },
-                onAvatarId = { viewModel.setAvatarId(it) }
-            )
-        }
-        composable(Route.TOUR) {
-            TourScreen(
-                onBack = { nav.popBackStack() },
-                onComplete = { viewModel.setTourCompleted(true) }
+                onAvatarId = { viewModel.setAvatarId(it) },
+                onDeleteNote = { viewModel.deleteNote(it) },
+                onStartTour = onStartTour
             )
         }
         composable(Route.ABOUT_DEVELOPER) {
@@ -228,7 +266,9 @@ private fun Agent0NavHost(
                 onBookmark = { viewModel.toggleBookmark(it) },
                 onOpenBrief = { c, b ->
                     nav.navigate(Route.brief(c, b)) { popUpTo(Route.BRIEF) { inclusive = true } }
-                }
+                },
+                onSaveNote = { k, t -> viewModel.setNote(k, t) },
+                onDeleteNote = { viewModel.deleteNote(it) }
             )
         }
 
@@ -312,7 +352,7 @@ private fun Agent0NavHost(
                 onUserAge = { viewModel.setUserAge(it) },
                 onAbout = { nav.navigate(Route.ABOUT) },
                 onAboutDeveloper = { nav.navigate(Route.ABOUT_DEVELOPER) },
-                onTour = { nav.navigate(Route.TOUR) },
+                onTour = onStartTour,
                 onWipe = { viewModel.wipe() }
             )
         }

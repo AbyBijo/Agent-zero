@@ -63,7 +63,9 @@ fun ProfileScreen(
     onToggleBookmark: (String) -> Unit,
     onUserName: (String) -> Unit,
     onUserAge: (Int?) -> Unit,
-    onAvatarId: (String) -> Unit
+    onAvatarId: (String) -> Unit,
+    onDeleteNote: (String) -> Unit = {},
+    onStartTour: () -> Unit = {}
 ) {
     var nameDraft by remember { mutableStateOf(progress.userName) }
     var ageDraft by remember { mutableStateOf(progress.userAge?.toString() ?: "") }
@@ -196,6 +198,8 @@ fun ProfileScreen(
                         )
                     }
                     Spacer(Modifier.height(14.dp))
+                    GhostButton(text = "Replay guided tour", onClick = onStartTour)
+                    Spacer(Modifier.height(14.dp))
                     Eyebrow("Avatar \u00B7 inbuilt only")
                     Spacer(Modifier.height(10.dp))
                     Row {
@@ -271,6 +275,59 @@ fun ProfileScreen(
                                     color = Ink.Dim,
                                     modifier = Modifier
                                         .noRippleClickable { onToggleBookmark(key) }
+                                        .padding(6.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            Spacer(Modifier.height(14.dp))
+        }
+
+        // ── notes ───────────────────────────────────────────────────
+        item {
+            RevealIn {
+                Panel {
+                    Eyebrow("Your notes \u00B7 ${progress.notes.size} \u00B7 private")
+                    Spacer(Modifier.height(10.dp))
+                    if (progress.notes.isEmpty()) {
+                        Text(
+                            "No notes yet. Add one at the bottom of any brief — " +
+                                "it stays on this device and is never part of your certificate.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Ink.Mid
+                        )
+                    } else {
+                        progress.notes.entries.sortedBy { it.key }.forEach { (noteKey, note) ->
+                            val parts = noteKey.split("/")
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .noRippleClickable {
+                                        if (parts.size == 2) onOpenBrief(parts[0], parts[1])
+                                    }
+                                    .padding(vertical = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Column(Modifier.weight(1f)) {
+                                    Text(
+                                        noteKey,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = Ink.White
+                                    )
+                                    Text(
+                                        note.take(120),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = Ink.Mid
+                                    )
+                                }
+                                Text(
+                                    "\u2715",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Ink.Dim,
+                                    modifier = Modifier
+                                        .noRippleClickable { onDeleteNote(noteKey) }
                                         .padding(6.dp)
                                 )
                             }

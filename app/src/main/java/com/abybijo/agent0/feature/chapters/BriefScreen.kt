@@ -14,13 +14,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -53,7 +58,9 @@ fun BriefScreen(
     onBack: () -> Unit,
     onToggleComplete: (String) -> Unit,
     onBookmark: (String) -> Unit,
-    onOpenBrief: (String, String) -> Unit
+    onOpenBrief: (String, String) -> Unit,
+    onSaveNote: (String, String) -> Unit = { _, _ -> },
+    onDeleteNote: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
     val chapter = Curriculum.chapter(chapterId)
@@ -226,6 +233,51 @@ fun BriefScreen(
                                     color = Ink.Rule
                                 )
                             }
+                        }
+                    }
+                }
+            }
+        }
+
+        // ── personal note ─────────────────────────────────────────────
+        // v2.0 (SRS §7.4): one editable note per brief, local only,
+        // never included in the certificate or any share payload.
+        item {
+            Spacer(Modifier.height(18.dp))
+            RevealIn {
+                val savedNote = progress.notes[key] ?: ""
+                var noteDraft by remember(key, savedNote) { mutableStateOf(savedNote) }
+                Panel {
+                    Eyebrow("Your note \u00B7 private, on this device only")
+                    Spacer(Modifier.height(10.dp))
+                    OutlinedTextField(
+                        value = noteDraft,
+                        onValueChange = { noteDraft = it },
+                        minLines = 3,
+                        placeholder = { Text("Write what this brief means for you…", color = Ink.Dim) },
+                        textStyle = MaterialTheme.typography.bodyMedium.copy(color = Ink.White),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedIndicatorColor = Ink.White,
+                            unfocusedIndicatorColor = Ink.Rule,
+                            cursorColor = Ink.White
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    Row {
+                        GhostButton(
+                            text = "Save note",
+                            enabled = noteDraft != savedNote,
+                            onClick = { onSaveNote(key, noteDraft) }
+                        )
+                        if (savedNote.isNotBlank()) {
+                            Spacer(Modifier.width(10.dp))
+                            GhostButton(
+                                text = "Delete note",
+                                onClick = { noteDraft = ""; onDeleteNote(key) }
+                            )
                         }
                     }
                 }

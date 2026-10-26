@@ -44,10 +44,57 @@ class Agent0Store(private val context: Context) {
         val TOUR_COMPLETED = booleanPreferencesKey("tour_completed")
         val PROFILE_PROMPT_DISMISSED = booleanPreferencesKey("profile_prompt_dismissed")
         val LAST_POSITION = stringPreferencesKey("last_position")
+        // v2.0 personal notes (SRS §7.4): one line per brief, stored as
+        // "chapterId/briefId<TAB>escaped-note". Notes are local only and
+        // are never included in any certificate or share payload.
+        val NOTES = stringPreferencesKey("notes")
     }
 
     private val prefs: Flow<Preferences> = context.dataStore.data
         .catch { e -> if (e is IOException) emit(emptyPreferences()) else throw e }
+
+    companion object {
+        private fun escapeNote(text: String): String = text
+            .replace("\\", "\\\\")
+            .replace("\n", "\\n")
+            .replace("\r", "\\r")
+            .replace("\t", "\\t")
+
+        private fun unescapeNote(text: String): String {
+            val out = StringBuilder()
+            var i = 0
+            while (i < text.length) {
+                val c = text[i]
+                if (c == '\\' && i + 1 < text.length) {
+                    when (text[i + 1]) {
+                        'n' -> out.append('\n')
+                        'r' -> out.append('\r')
+                        't' -> out.append('\t')
+                        '\\' -> out.append('\\')
+                        else -> { out.append(c); out.append(text[i + 1]) }
+                    }
+                    i += 2
+                } else {
+                    out.append(c)
+                    i++
+                }
+            }
+            return out.toString()
+        }
+
+        private fun parseNotes(raw: String): Map<String, String> {
+            if (raw.isBlank()) return emptyMap()
+            val map = linkedMapOf<String, String>()
+            raw.lines().forEach { line ->
+                val tab = line.indexOf('\t')
+                if (tab > 0) map[line.substring(0, tab)] = unescapeNote(line.substring(tab + 1))
+            }
+            return map
+        }
+
+        private fun serializeNotes(map: Map<String, String>): String =
+            map.entries.joinToString("\n") { (k, v) -> "$k\t${escapeNote(v)}" }
+    }
 
     val onboarded: Flow<Boolean> = prefs.map { it[Keys.ONBOARDED] ?: false }
     val completedBriefs: Flow<Set<String>> = prefs.map { it[Keys.COMPLETED_BRIEFS] ?: emptySet() }
@@ -67,6 +114,10 @@ class Agent0Store(private val context: Context) {
     val profilePromptDismissed: Flow<Boolean> =
         prefs.map { it[Keys.PROFILE_PROMPT_DISMISSED] ?: false }
     val lastPosition: Flow<String> = prefs.map { it[Keys.LAST_POSITION] ?: "" }
+
+    val notes: Flow<Map<String, String>> = prefs.map { p ->
+        parseNotes(p[Keys.NOTES] ?: "")
+    }
 
     suspend fun setOnboarded(value: Boolean) =
         context.dataStore.edit { it[Keys.ONBOARDED] = value }
@@ -136,6 +187,19 @@ class Agent0Store(private val context: Context) {
     /** "chapterId/briefId", or "" when no position has been saved yet. */
     suspend fun setLastPosition(value: String) =
         context.dataStore.edit { it[Keys.LAST_POSITION] = value.trim() }
+
+    /** Save a note for one brief; a blank note deletes it. */
+    suspend fun setNote(key: String, text: String) = context.dataStore.edit { p ->
+        val cur = parseNotes(p[Keys.NOTES] ?: "").toMutableMap()
+        if (text.isBlank()) cur.remove(key) else cur[key] = text
+        p[Keys.NOTES] = serializeNotes(cur)
+    }
+
+    suspend fun deleteNote(key: String) = context.dataStore.edit { p ->
+        val cur = parseNotes(p[Keys.NOTES] ?: "").toMutableMap()
+        cur.remove(key)
+        p[Keys.NOTES] = serializeNotes(cur)
+    }
 
     /** Full local wipe — the app's own "burn" function. */
     suspend fun wipeAll() = context.dataStore.edit { it.clear() }

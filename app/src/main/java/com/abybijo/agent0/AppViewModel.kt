@@ -35,7 +35,10 @@ data class Progress(
     val avatarId: String = "",
     val tourCompleted: Boolean = false,
     val profilePromptDismissed: Boolean = false,
-    val lastPosition: String = ""
+    val lastPosition: String = "",
+    // v2.0 personal notes (SRS §7.4). Local only; never part of the
+    // certificate or any share payload.
+    val notes: Map<String, String> = emptyMap()
 ) {
     val briefFraction: Float
         get() = if (Curriculum.totalBriefs == 0) 0f
@@ -148,7 +151,7 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         Profile(age, avatar, tour, dismissed, last)
     }
 
-    val progress: StateFlow<Progress> = combine(learning, scores, prefs, profile) { l, s, p, pr ->
+    val progress: StateFlow<Progress> = combine(learning, scores, prefs, profile, store.notes) { l, s, p, pr, notes ->
         Progress(
             onboarded = l.onboarded,
             completedBriefs = l.briefs,
@@ -166,7 +169,8 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
             avatarId = pr.avatarId,
             tourCompleted = pr.tourCompleted,
             profilePromptDismissed = pr.profilePromptDismissed,
-            lastPosition = pr.lastPosition
+            lastPosition = pr.lastPosition,
+            notes = notes
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, Progress())
 
@@ -181,6 +185,8 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     fun setProfilePromptDismissed(v: Boolean) =
         viewModelScope.launch { store.setProfilePromptDismissed(v) }
     fun setLastPosition(key: String) = viewModelScope.launch { store.setLastPosition(key) }
+    fun setNote(key: String, text: String) = viewModelScope.launch { store.setNote(key, text) }
+    fun deleteNote(key: String) = viewModelScope.launch { store.deleteNote(key) }
     fun toggleBrief(key: String) = viewModelScope.launch { store.toggleBriefComplete(key) }
     fun markBrief(key: String) = viewModelScope.launch { store.markBriefComplete(key) }
     fun toggleCheck(key: String) = viewModelScope.launch { store.toggleCheckItem(key) }
