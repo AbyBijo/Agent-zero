@@ -2,6 +2,18 @@ name: Build Agent-0 APK
 
 # Builds a debug APK in the cloud and attaches it as a downloadable artifact.
 # Run it from your phone: GitHub → Actions → "Build Agent-0 APK" → Run workflow.
+#
+# Why this workflow looks the way it does:
+# - ubuntu-24.04 is pinned (not ubuntu-latest) because ubuntu-latest is
+#   migrating to Ubuntu 26, and the Android SDK layout on the new image
+#   is still changing. Pinning avoids a surprise runner change breaking
+#   the build.
+# - android-actions/setup-android is deliberately NOT used. It was the
+#   step that failed on every run (run 22 failed there in ~20 seconds,
+#   before Gradle ever started), while checkout and setup-java on the
+#   same runner succeeded. GitHub-hosted Ubuntu runners already ship
+#   an Android SDK, so this workflow uses that preinstalled SDK and
+#   installs only the exact packages this project needs.
 on:
   push:
     branches: [ main, master ]
@@ -11,20 +23,40 @@ on:
 jobs:
   build:
     name: Assemble debug APK
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Check out sources
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Install Android SDK packages
+        # Uses the SDK already installed on the GitHub-hosted runner
+        # ($ANDROID_HOME). Installs exactly what this project needs:
+        # compileSdk 34, and build-tools 35.0.0 (the default for AGP 8.5.2).
+        # If sdkmanager is not present, fall back to the preinstalled
+        # packages and let Gradle report clearly if anything is missing,
+        # instead of failing inside an opaque third-party setup action.
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          ls "$ANDROID_HOME" || true
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            SDKMANAGER="$(find "$ANDROID_HOME" -name sdkmanager -type f 2>/dev/null | head -n 1)"
+          fi
+          if [ -z "$SDKMANAGER" ]; then
+            echo "sdkmanager not found; using preinstalled SDK packages"
+            ls "$ANDROID_HOME/platforms" "$ANDROID_HOME/build-tools" || true
+          else
+            echo "Using sdkmanager: $SDKMANAGER"
+            yes | "$SDKMANAGER" --licenses >/dev/null || true
+            "$SDKMANAGER" "platform-tools" "platforms;android-34" "build-tools;35.0.0"
+          fi
 
       # Uses a pinned Gradle directly, so no gradle-wrapper.jar is required
       # in the repository.
@@ -35,6 +67,9 @@ jobs:
 
       - name: Assemble debug APK
         run: gradle assembleDebug --no-daemon --stacktrace
+
+      - name: Verify APK
+        run: ls -lh app/build/outputs/apk/debug/
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
