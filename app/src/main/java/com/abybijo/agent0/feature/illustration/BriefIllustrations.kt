@@ -80,7 +80,18 @@ object BriefIllustrations {
         "financial/fin-crypto" to BriefIllustrationSpec(Motif.DANGER, "Public does not mean private."),
         "financial/fin-tax-records" to BriefIllustrationSpec(Motif.BOOK, "Encrypted, backed up, and access-controlled."),
         "financial/fin-scams" to BriefIllustrationSpec(Motif.WARNING, "A recovery offer that arrives unsolicited is a scam."),
-        "financial/fin-routine" to BriefIllustrationSpec(Motif.HOURGLASS, "Scheduled routines survive busy months.")
+        "financial/fin-routine" to BriefIllustrationSpec(Motif.HOURGLASS, "Scheduled routines survive busy months."),
+        // ── CH-12 Incident Response (Phase 4b, first batch) ──────────
+        "incident/ir-first-hour" to BriefIllustrationSpec(Motif.HOURGLASS, "Stop, preserve, note — in that order."),
+        "incident/ir-evidence" to BriefIllustrationSpec(Motif.EYE, "Observe first, copy second, change last."),
+        "incident/ir-account" to BriefIllustrationSpec(Motif.LOCK, "Lock, recover, check — from a clean device."),
+        "incident/ir-device" to BriefIllustrationSpec(Motif.DEVICE, "Isolation first; sensitive work moves elsewhere."),
+        "incident/ir-breach" to BriefIllustrationSpec(Motif.SCALE, "Priority beats completeness in the first hour."),
+        "incident/ir-identity-theft" to BriefIllustrationSpec(Motif.BOOK, "One dated file makes a long recovery manageable."),
+        "incident/ir-reporting" to BriefIllustrationSpec(Motif.ENVELOPE, "Early and factual beats late and complete."),
+        "incident/ir-talking" to BriefIllustrationSpec(Motif.CIRCLE, "Honesty about the fact, restraint about the detail."),
+        "incident/ir-recovery-checklist" to BriefIllustrationSpec(Motif.SCALE, "Recovery is a checklist decision, not a feeling."),
+        "incident/ir-after-action" to BriefIllustrationSpec(Motif.BOOK, "Review the system, not the person.")
     )
 
     fun forKey(key: String): BriefIllustrationSpec? = all[key]

@@ -17,16 +17,21 @@ package com.abybijo.agent0.data
  *   08  FIELDCRAFT       — secure comms, borders, money trails, teams, sustaining it
  *   09  AI-ERA           — AI tools, synthetic media, agents, verification
  *   10  FINANCIAL        — money trails, separation, payments, routines
+ *   12  INCIDENT         — first hour, evidence, recovery, reporting
+ *       (CH-11, CH-13, CH-14 follow in Phase 4b, in numeric order)
  *
  * Every brief is written to be read on a phone in a few minutes and ends with
  * references the recruit can verify independently.
  */
 object Curriculum {
 
+    // Phase 4b build order is CH-12 first, then CH-11, CH-13, CH-14.
+    // CH-12 sits at the end until CH-11 arrives, when the list is
+    // reordered to numeric chapter order (see Phase 4b completion).
     val chapters: List<Chapter> = listOf(
         chapter00(), chapter01(), chapter02(), chapter03(),
         chapter04(), chapter05(), chapter06(), chapter07(),
-        chapter08(), chapter09(), chapter10()
+        chapter08(), chapter09(), chapter10(), chapter12()
     )
 
     val allBriefs: List<Pair<Chapter, Brief>> =
