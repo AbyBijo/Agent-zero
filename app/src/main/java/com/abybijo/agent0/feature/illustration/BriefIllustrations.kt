@@ -58,7 +58,29 @@ object BriefIllustrations {
         "fieldcraft/financial-privacy" to BriefIllustrationSpec(Motif.CHAIN, "Payment data links identities, places, and habits."),
         "fieldcraft/under-surveillance" to BriefIllustrationSpec(Motif.EYE, "Normal behaviour is camouflage."),
         "fieldcraft/team-opsec" to BriefIllustrationSpec(Motif.NETWORK, "A team is only as secure as its least-informed member."),
-        "fieldcraft/sustain" to BriefIllustrationSpec(Motif.STAIRS, "Endurance is a security control.")
+        "fieldcraft/sustain" to BriefIllustrationSpec(Motif.STAIRS, "Endurance is a security control."),
+        // ── CH-09 AI-Era (Phase 4a) ────────────────────────────────
+        "ai-era/ai-feed" to BriefIllustrationSpec(Motif.ENVELOPE, "Read the prompt as if it were published."),
+        "ai-era/ai-memory" to BriefIllustrationSpec(Motif.BOOK, "Memory is a store held by someone else."),
+        "ai-era/ai-work-home" to BriefIllustrationSpec(Motif.CHAIN, "Work, personal, and sensitive use must not merge."),
+        "ai-era/ai-deepfake" to BriefIllustrationSpec(Motif.MASK, "Seeing and hearing are no longer proof."),
+        "ai-era/ai-phishing" to BriefIllustrationSpec(Motif.WARNING, "Style is no longer a reliable signal."),
+        "ai-era/ai-media-evidence" to BriefIllustrationSpec(Motif.EYE, "One image is a claim, not proof."),
+        "ai-era/ai-agents" to BriefIllustrationSpec(Motif.KEY, "Delegation is not abdication."),
+        "ai-era/ai-verify-output" to BriefIllustrationSpec(Motif.SCALE, "Confidence in the writing is not evidence."),
+        "ai-era/ai-research-code" to BriefIllustrationSpec(Motif.BOOK, "Redact first, verify second, publish third."),
+        "ai-era/ai-personal-rules" to BriefIllustrationSpec(Motif.CIRCLE, "Six rules you can actually remember."),
+        // ── CH-10 Financial Privacy (Phase 4a) ───────────────────────
+        "financial/fin-footprint" to BriefIllustrationSpec(Motif.MAP, "A purchase history is a biography with timestamps."),
+        "financial/fin-separation" to BriefIllustrationSpec(Motif.CHAIN, "Separation limits blast radius."),
+        "financial/fin-payments" to BriefIllustrationSpec(Motif.SCALE, "Choose the method by the risk, not by habit."),
+        "financial/fin-cash-prepaid" to BriefIllustrationSpec(Motif.CIRCLE, "No method is magic."),
+        "financial/fin-subscriptions" to BriefIllustrationSpec(Motif.NETWORK, "The discount is the price."),
+        "financial/fin-banking-apps" to BriefIllustrationSpec(Motif.DEVICE, "Alerts turn a surprise into a minutes-old problem."),
+        "financial/fin-crypto" to BriefIllustrationSpec(Motif.DANGER, "Public does not mean private."),
+        "financial/fin-tax-records" to BriefIllustrationSpec(Motif.BOOK, "Encrypted, backed up, and access-controlled."),
+        "financial/fin-scams" to BriefIllustrationSpec(Motif.WARNING, "A recovery offer that arrives unsolicited is a scam."),
+        "financial/fin-routine" to BriefIllustrationSpec(Motif.HOURGLASS, "Scheduled routines survive busy months.")
     )
 
     fun forKey(key: String): BriefIllustrationSpec? = all[key]

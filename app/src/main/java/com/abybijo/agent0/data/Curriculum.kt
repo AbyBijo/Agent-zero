@@ -3,7 +3,7 @@ package com.abybijo.agent0.data
 /**
  * ── AGENT-0 CURRICULUM ────────────────────────────────────────────────────
  *
- * Nine chapters, ordered by expertise. A recruit who works them in sequence
+ * Chapters, ordered by expertise. A recruit who works them in sequence
  * goes from "I reuse one password" to "I can build and defend a threat model".
  *
  *   00  ORIENTATION      — the rules, the mindset, how to train
@@ -15,6 +15,8 @@ package com.abybijo.agent0.data
  *   06  IDENTITY         — compartmentation, personas, metadata, networks
  *   07  TRADECRAFT       — threat modelling, incident response, sustaining it
  *   08  FIELDCRAFT       — secure comms, borders, money trails, teams, sustaining it
+ *   09  AI-ERA           — AI tools, synthetic media, agents, verification
+ *   10  FINANCIAL        — money trails, separation, payments, routines
  *
  * Every brief is written to be read on a phone in a few minutes and ends with
  * references the recruit can verify independently.
@@ -24,7 +26,7 @@ object Curriculum {
     val chapters: List<Chapter> = listOf(
         chapter00(), chapter01(), chapter02(), chapter03(),
         chapter04(), chapter05(), chapter06(), chapter07(),
-        chapter08()
+        chapter08(), chapter09(), chapter10()
     )
 
     val allBriefs: List<Pair<Chapter, Brief>> =
