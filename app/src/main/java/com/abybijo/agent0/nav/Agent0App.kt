@@ -101,9 +101,12 @@ private fun MainScaffold(viewModel: AppViewModel, progress: Progress) {
     // once after onboarding (tourCompleted false); Skip/Finish record
     // completion so it never reappears uninvited.
     var tourStep by remember { mutableIntStateOf(if (progress.tourCompleted) -1 else 0) }
-    val closeTour = {
+    // Explicit Unit: setTourCompleted returns a Job (viewModelScope.launch),
+    // and passing a () -> Job where () -> Unit is expected fails compilation.
+    val closeTour: () -> Unit = {
         tourStep = -1
         viewModel.setTourCompleted(true)
+        Unit
     }
     val startTour = {
         tourStep = 0
