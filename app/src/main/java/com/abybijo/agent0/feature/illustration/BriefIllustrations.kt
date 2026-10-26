@@ -102,7 +102,18 @@ object BriefIllustrations {
         "team/team-remote" to BriefIllustrationSpec(Motif.MAP, "The posture travels with the person."),
         "team/team-managers" to BriefIllustrationSpec(Motif.SHIELD, "The manager's behaviour is the policy the team learns."),
         "team/team-mistake" to BriefIllustrationSpec(Motif.SHIELD, "Blame is a security failure."),
-        "team/team-drills" to BriefIllustrationSpec(Motif.HOURGLASS, "A habit is a schedule, not a sentiment.")
+        "team/team-drills" to BriefIllustrationSpec(Motif.HOURGLASS, "A habit is a schedule, not a sentiment."),
+        // ── CH-13 OSINT (Phase 4b, third batch) ──────────────────────
+        "osint/osint-shadow" to BriefIllustrationSpec(Motif.EYE, "Combination is the risk."),
+        "osint/osint-self-audit" to BriefIllustrationSpec(Motif.EYE, "Search yourself, on your own information only."),
+        "osint/osint-social" to BriefIllustrationSpec(Motif.NETWORK, "Post as if the pieces will be assembled."),
+        "osint/osint-brokers" to BriefIllustrationSpec(Motif.BOOK, "Removal is maintenance, not a one-time fix."),
+        "osint/osint-removal" to BriefIllustrationSpec(Motif.SCALE, "Remove, reduce, or accept — and know which."),
+        "osint/osint-public-speaking" to BriefIllustrationSpec(Motif.SHIELD, "Publicity is a one-way door."),
+        "osint/osint-personal-life" to BriefIllustrationSpec(Motif.CIRCLE, "A private life is shared with the people it belongs to."),
+        "osint/osint-household" to BriefIllustrationSpec(Motif.MAP, "One person's settings, everyone's exposure."),
+        "osint/osint-public-roles" to BriefIllustrationSpec(Motif.SHIELD, "Higher visibility, higher discipline."),
+        "osint/osint-private-core" to BriefIllustrationSpec(Motif.CIRCLE, "A life that is not content.")
     )
 
     fun forKey(key: String): BriefIllustrationSpec? = all[key]

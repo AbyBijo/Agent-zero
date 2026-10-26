@@ -19,7 +19,8 @@ package com.abybijo.agent0.data
  *   10  FINANCIAL        — money trails, separation, payments, routines
  *   11  TEAM             — need-to-know, shared access, onboarding, culture
  *   12  INCIDENT         — first hour, evidence, recovery, reporting
- *       (CH-13, CH-14 follow in Phase 4b, in numeric order)
+ *   13  OSINT            — public shadow, self-audit, brokers, private core
+ *       (CH-14 follows in Phase 4b)
  *
  * Every brief is written to be read on a phone in a few minutes and ends with
  * references the recruit can verify independently.
@@ -30,7 +31,7 @@ object Curriculum {
         chapter00(), chapter01(), chapter02(), chapter03(),
         chapter04(), chapter05(), chapter06(), chapter07(),
         chapter08(), chapter09(), chapter10(), chapter11(),
-        chapter12()
+        chapter12(), chapter13()
     )
 
     val allBriefs: List<Pair<Chapter, Brief>> =
