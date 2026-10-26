@@ -113,7 +113,19 @@ object BriefIllustrations {
         "osint/osint-personal-life" to BriefIllustrationSpec(Motif.CIRCLE, "A private life is shared with the people it belongs to."),
         "osint/osint-household" to BriefIllustrationSpec(Motif.MAP, "One person's settings, everyone's exposure."),
         "osint/osint-public-roles" to BriefIllustrationSpec(Motif.SHIELD, "Higher visibility, higher discipline."),
-        "osint/osint-private-core" to BriefIllustrationSpec(Motif.CIRCLE, "A life that is not content.")
+        "osint/osint-private-core" to BriefIllustrationSpec(Motif.CIRCLE, "A life that is not content."),
+        // ── CH-14 Travel (Phase 4b, final batch) ─────────────────────
+        "travel/travel-threat-model" to BriefIllustrationSpec(Motif.MAP, "Destination, purpose, adversary — in that order."),
+        "travel/travel-packing" to BriefIllustrationSpec(Motif.BOOK, "Travel light in data, not only in luggage."),
+        "travel/travel-border" to BriefIllustrationSpec(Motif.SHIELD, "General information, not legal advice."),
+        "travel/travel-clean-device" to BriefIllustrationSpec(Motif.DEVICE, "Clean means proportionate to the trip."),
+        "travel/travel-hotels" to BriefIllustrationSpec(Motif.MAP, "Plan as if someone will enter your room."),
+        "travel/travel-networks" to BriefIllustrationSpec(Motif.NETWORK, "Untrusted, every time, without exception."),
+        "travel/travel-meetings" to BriefIllustrationSpec(Motif.CIRCLE, "Rule 1 on the move is Rule 1 at home."),
+        "travel/travel-surveillance" to BriefIllustrationSpec(Motif.EYE, "Calm, specific, and actionable."),
+        "travel/travel-device-taken" to BriefIllustrationSpec(Motif.WARNING, "A returned device is not a trusted device."),
+        "travel/travel-return-home" to BriefIllustrationSpec(Motif.SCALE, "The trip ends when you close it."),
+        "travel/travel-routine" to BriefIllustrationSpec(Motif.HOURGLASS, "A habit is a checklist used on every trip.")
     )
 
     fun forKey(key: String): BriefIllustrationSpec? = all[key]
