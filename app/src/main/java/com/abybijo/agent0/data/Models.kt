@@ -37,7 +37,19 @@ data class Brief(
     val summary: String,
     val minutes: Int,
     val blocks: List<Block>,
-    val references: List<Reference> = emptyList()
+    val references: List<Reference> = emptyList(),
+    // v2.0 brief template (SRS §6). All default to empty so every existing
+    // Brief(...) call still compiles; Phase 3 fills these in, brief by brief.
+    /** "After this brief, you will be able to…" — checkable outcomes. */
+    val outcomes: List<String> = emptyList(),
+    /** Concrete, ordered steps the learner can actually do. */
+    val howTo: List<String> = emptyList(),
+    /** Practices that hold up under pressure, in priority order. */
+    val bestPractices: List<String> = emptyList(),
+    /** What goes wrong, what to avoid, and what to do if it already has. */
+    val cautions: List<String> = emptyList(),
+    /** Vector illustration reference for this brief, when one exists. */
+    val illustration: String? = null
 )
 
 data class Chapter(
@@ -73,14 +85,25 @@ data class CaseStudy(
     val tags: List<String>,
     val summary: String,
     val details: String,
-    val lessons: List<String>
+    val lessons: List<String>,
+    // v2.0 linking (SRS §5.2, §6.3). Null = general background case, shown
+    // in the Cases index; non-null = brief-locked case for that brief.
+    val briefKey: String? = null,
+    /** Public source that was checked for this case, when one is recorded. */
+    val source: String = ""
 )
 
 data class QuizQuestion(
     val prompt: String,
     val options: List<String>,
     val answerIndex: Int,
-    val rationale: String
+    val rationale: String,
+    // v2.0 linking (SRS §5.3). Defaults keep every existing
+    // QuizQuestion(...) call compiling; Phase 4 fills these in.
+    val id: String = "",
+    /** "chapterId/briefId" this question tests, or "" for unassigned. */
+    val briefKey: String = "",
+    val difficulty: String = "Foundational"
 )
 
 data class ChecklistGroup(
@@ -110,5 +133,8 @@ data class Scenario(
     val title: String,
     val intro: String,
     val start: String,
-    val steps: Map<String, ScenarioStep>
+    val steps: Map<String, ScenarioStep>,
+    // v2.0 linking (SRS §5.1). Null = unassigned; non-null = the brief
+    // whose completion unlocks this drill.
+    val briefKey: String? = null
 )

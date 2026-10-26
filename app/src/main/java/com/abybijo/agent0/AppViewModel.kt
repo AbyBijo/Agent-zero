@@ -7,6 +7,7 @@ import com.abybijo.agent0.data.Agent0Store
 import com.abybijo.agent0.data.Checklists
 import com.abybijo.agent0.data.Curriculum
 import com.abybijo.agent0.data.Diagnostic
+import com.abybijo.agent0.data.Progression
 import com.abybijo.agent0.data.Scenarios
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +28,14 @@ data class Progress(
     val scenariosDone: Set<String> = emptySet(),
     val reduceMotion: Boolean = false,
     val scanlines: Boolean = true,
-    val userName: String = ""
+    val userName: String = "",
+    // v2.0 profile fields. userAge is display-only (SRS §7.3) and is
+    // deliberately not used by any locking or quiz logic below.
+    val userAge: Int? = null,
+    val avatarId: String = "",
+    val tourCompleted: Boolean = false,
+    val profilePromptDismissed: Boolean = false,
+    val lastPosition: String = ""
 ) {
     val briefFraction: Float
         get() = if (Curriculum.totalBriefs == 0) 0f
@@ -66,6 +74,19 @@ data class Progress(
     fun isBriefDone(chapterId: String, briefId: String) =
         "$chapterId/$briefId" in completedBriefs
 
+    // ── v2.0 locking (SRS §4), via Progression ────────────────────────
+    fun isBriefAccessible(chapterId: String, briefId: String): Boolean =
+        Progression.isAccessible(Curriculum.orderedKeys, completedBriefs, "$chapterId/$briefId")
+
+    fun prerequisiteFor(chapterId: String, briefId: String): String? =
+        Progression.prerequisiteKey(Curriculum.orderedKeys, "$chapterId/$briefId")
+
+    val isCertificateUnlocked: Boolean
+        get() = Progression.isCertificateUnlocked(Curriculum.orderedKeys, completedBriefs)
+
+    val certificateRemaining: Int
+        get() = Progression.remainingForCertificate(Curriculum.orderedKeys, completedBriefs).size
+
     fun chapterDone(chapterId: String): Int =
         Curriculum.chapter(chapterId)?.briefs?.count { "$chapterId/${it.id}" in completedBriefs } ?: 0
 }
@@ -100,6 +121,14 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         val userName: String
     )
 
+    private data class Profile(
+        val userAge: Int?,
+        val avatarId: String,
+        val tourCompleted: Boolean,
+        val profilePromptDismissed: Boolean,
+        val lastPosition: String
+    )
+
     private val learning = combine(
         store.onboarded, store.completedBriefs, store.checkedItems, store.bookmarks
     ) { onboarded, briefs, checks, marks -> Learning(onboarded, briefs, checks, marks) }
@@ -112,7 +141,14 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         store.scenariosDone, store.reduceMotion, store.scanlines, store.userName
     ) { done, motion, scan, name -> Prefs(done, motion, scan, name) }
 
-    val progress: StateFlow<Progress> = combine(learning, scores, prefs) { l, s, p ->
+    private val profile = combine(
+        store.userAge, store.avatarId, store.tourCompleted,
+        store.profilePromptDismissed, store.lastPosition
+    ) { age, avatar, tour, dismissed, last ->
+        Profile(age, avatar, tour, dismissed, last)
+    }
+
+    val progress: StateFlow<Progress> = combine(learning, scores, prefs, profile) { l, s, p, pr ->
         Progress(
             onboarded = l.onboarded,
             completedBriefs = l.briefs,
@@ -125,7 +161,12 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
             scenariosDone = p.scenarios,
             reduceMotion = p.reduceMotion,
             scanlines = p.scanlines,
-            userName = p.userName
+            userName = p.userName,
+            userAge = pr.userAge,
+            avatarId = pr.avatarId,
+            tourCompleted = pr.tourCompleted,
+            profilePromptDismissed = pr.profilePromptDismissed,
+            lastPosition = pr.lastPosition
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, Progress())
 
@@ -134,6 +175,12 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         store.setOnboarded(true)
     }
     fun setUserName(name: String) = viewModelScope.launch { store.setUserName(name) }
+    fun setUserAge(age: Int?) = viewModelScope.launch { store.setUserAge(age) }
+    fun setAvatarId(id: String) = viewModelScope.launch { store.setAvatarId(id) }
+    fun setTourCompleted(v: Boolean) = viewModelScope.launch { store.setTourCompleted(v) }
+    fun setProfilePromptDismissed(v: Boolean) =
+        viewModelScope.launch { store.setProfilePromptDismissed(v) }
+    fun setLastPosition(key: String) = viewModelScope.launch { store.setLastPosition(key) }
     fun toggleBrief(key: String) = viewModelScope.launch { store.toggleBriefComplete(key) }
     fun markBrief(key: String) = viewModelScope.launch { store.markBriefComplete(key) }
     fun toggleCheck(key: String) = viewModelScope.launch { store.toggleCheckItem(key) }

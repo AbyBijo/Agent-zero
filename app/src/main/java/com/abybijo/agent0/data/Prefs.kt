@@ -36,6 +36,14 @@ class Agent0Store(private val context: Context) {
         val REDUCE_MOTION = booleanPreferencesKey("reduce_motion")
         val SCANLINES = booleanPreferencesKey("scanlines")
         val USER_NAME = stringPreferencesKey("user_name")
+        // v2.0 profile fields (SRS §7.3, §8.1). Age is display-only and
+        // must never gate content, locking, or quiz tiers. Avatar is an
+        // inbuilt drawable id only — no photo, camera, or gallery access.
+        val USER_AGE = intPreferencesKey("user_age")
+        val AVATAR_ID = stringPreferencesKey("avatar_id")
+        val TOUR_COMPLETED = booleanPreferencesKey("tour_completed")
+        val PROFILE_PROMPT_DISMISSED = booleanPreferencesKey("profile_prompt_dismissed")
+        val LAST_POSITION = stringPreferencesKey("last_position")
     }
 
     private val prefs: Flow<Preferences> = context.dataStore.data
@@ -53,6 +61,12 @@ class Agent0Store(private val context: Context) {
     val reduceMotion: Flow<Boolean> = prefs.map { it[Keys.REDUCE_MOTION] ?: false }
     val scanlines: Flow<Boolean> = prefs.map { it[Keys.SCANLINES] ?: true }
     val userName: Flow<String> = prefs.map { it[Keys.USER_NAME] ?: "" }
+    val userAge: Flow<Int?> = prefs.map { it[Keys.USER_AGE] }
+    val avatarId: Flow<String> = prefs.map { it[Keys.AVATAR_ID] ?: "" }
+    val tourCompleted: Flow<Boolean> = prefs.map { it[Keys.TOUR_COMPLETED] ?: false }
+    val profilePromptDismissed: Flow<Boolean> =
+        prefs.map { it[Keys.PROFILE_PROMPT_DISMISSED] ?: false }
+    val lastPosition: Flow<String> = prefs.map { it[Keys.LAST_POSITION] ?: "" }
 
     suspend fun setOnboarded(value: Boolean) =
         context.dataStore.edit { it[Keys.ONBOARDED] = value }
@@ -104,6 +118,24 @@ class Agent0Store(private val context: Context) {
 
     suspend fun setUserName(value: String) =
         context.dataStore.edit { it[Keys.USER_NAME] = value.trim() }
+
+    /** Age is stored only for display on the Profile page (SRS §7.3). */
+    suspend fun setUserAge(value: Int?) = context.dataStore.edit { p ->
+        if (value == null) p.remove(Keys.USER_AGE) else p[Keys.USER_AGE] = value
+    }
+
+    suspend fun setAvatarId(value: String) =
+        context.dataStore.edit { it[Keys.AVATAR_ID] = value.trim() }
+
+    suspend fun setTourCompleted(value: Boolean) =
+        context.dataStore.edit { it[Keys.TOUR_COMPLETED] = value }
+
+    suspend fun setProfilePromptDismissed(value: Boolean) =
+        context.dataStore.edit { it[Keys.PROFILE_PROMPT_DISMISSED] = value }
+
+    /** "chapterId/briefId", or "" when no position has been saved yet. */
+    suspend fun setLastPosition(value: String) =
+        context.dataStore.edit { it[Keys.LAST_POSITION] = value.trim() }
 
     /** Full local wipe — the app's own "burn" function. */
     suspend fun wipeAll() = context.dataStore.edit { it.clear() }
