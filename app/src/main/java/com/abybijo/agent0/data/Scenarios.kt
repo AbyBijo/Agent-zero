@@ -1836,7 +1836,7 @@ object Scenarios {
                 )
             )
         ),
-    ) + Scenarios09.all
+    ) + Scenarios09.all + Scenarios10.all
 
     fun byId(id: String): Scenario? = all.firstOrNull { it.id == id }
 }
