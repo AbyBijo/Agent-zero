@@ -46,7 +46,7 @@ jobs:
           AGENT0_KEYSTORE_PASSWORD: ${{ secrets.AGENT0_KEYSTORE_PASSWORD }}
           AGENT0_KEY_ALIAS: ${{ secrets.AGENT0_KEY_ALIAS }}
           AGENT0_KEY_PASSWORD: ${{ secrets.AGENT0_KEY_PASSWORD }}
-        run: ./gradlew assembleRelease assembleDebug --no-daemon --stacktrace
+        run: gradle assembleRelease assembleDebug --no-daemon --stacktrace
       - name: Verify APKs
         run: |
           ls -lh app/build/outputs/apk/release/ app/build/outputs/apk/debug/
