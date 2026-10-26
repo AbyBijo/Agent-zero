@@ -3,7 +3,7 @@ package com.abybijo.agent0.data
 /**
  * ── AGENT-0 CURRICULUM ────────────────────────────────────────────────────
  *
- * Eight chapters, ordered by expertise. A recruit who works them in sequence
+ * Nine chapters, ordered by expertise. A recruit who works them in sequence
  * goes from "I reuse one password" to "I can build and defend a threat model".
  *
  *   00  ORIENTATION      — the rules, the mindset, how to train
@@ -14,6 +14,7 @@ package com.abybijo.agent0.data
  *   05  COGNITIVE        — biases, emotional exploitation, mental models
  *   06  IDENTITY         — compartmentation, personas, metadata, networks
  *   07  TRADECRAFT       — threat modelling, incident response, sustaining it
+ *   08  FIELDCRAFT       — secure comms, borders, money trails, teams, sustaining it
  *
  * Every brief is written to be read on a phone in a few minutes and ends with
  * references the recruit can verify independently.
@@ -22,7 +23,8 @@ object Curriculum {
 
     val chapters: List<Chapter> = listOf(
         chapter00(), chapter01(), chapter02(), chapter03(),
-        chapter04(), chapter05(), chapter06(), chapter07()
+        chapter04(), chapter05(), chapter06(), chapter07(),
+        chapter08()
     )
 
     val allBriefs: List<Pair<Chapter, Brief>> =
@@ -188,6 +190,41 @@ private fun chapter00() = Chapter(
             ),
             references = listOf(
                 Reference("Learning: retrieval practice", "https://www.retrievalpractice.org/", "Why drilling beats re-reading.")
+            )
+        ),
+        Brief(
+            id = "first-week",
+            title = "The First Week",
+            glyph = "\u25C9",
+            summary = "Seven days of small changes that build a real posture.",
+            minutes = 3,
+            blocks = listOf(
+                Block.Para(
+                    "Do not try to rebuild your whole security life in one evening. " +
+                        "Pick one change a day, finish it properly, and let the habit " +
+                        "settle before adding the next."
+                ),
+                Block.Heading("One change a day", "\u25B8"),
+                Block.Numbered(
+                    listOf(
+                        "Day 1: install a password manager and move your most important account into it.",
+                        "Day 2: turn on two-factor authentication on email, then on banking and cloud storage.",
+                        "Day 3: update every device and turn on automatic updates.",
+                        "Day 4: check your email addresses for known breaches and change any exposed passwords.",
+                        "Day 5: turn on full-disk encryption and write down your recovery key somewhere safe.",
+                        "Day 6: review app permissions and remove apps you no longer use.",
+                        "Day 7: back up one important folder and restore one file from it, to prove the backup works."
+                    )
+                ),
+                Block.Field(
+                    "The test",
+                    "At the end of the week you should be able to answer three " +
+                        "questions: what are my most important accounts, how are they " +
+                        "protected, and how would I recover them if I lost my phone?"
+                )
+            ),
+            references = listOf(
+                Reference("EFF — Surveillance Self-Defense", "https://ssd.eff.org/", "A week of guided first steps.")
             )
         )
     )
@@ -499,6 +536,39 @@ private fun chapter01() = Chapter(
             ),
             references = listOf(
                 Reference("CIS Critical Security Controls", "https://www.cisecurity.org/controls", "Prioritised, prescriptive countermeasure list.")
+            )
+        ),
+        Brief(
+            id = "threat-model-ten",
+            title = "Threat Modelling in Ten Minutes",
+            glyph = "\u25CE",
+            summary = "A usable threat model, written down, in ten minutes.",
+            minutes = 3,
+            blocks = listOf(
+                Block.Para(
+                    "A threat model is simply a written answer to five questions. " +
+                        "Answer them honestly, in plain language, and you have a " +
+                        "model you can actually use to choose controls."
+                ),
+                Block.Heading("The five questions", "\u25B8"),
+                Block.Bullets(
+                    listOf(
+                        "What do I want to protect? Name the accounts, files, and conversations that matter most.",
+                        "From whom do I want to protect it? A nosy neighbour, a thief, a former partner, a company, or a government are very different adversaries.",
+                        "How likely is an attack, and how bad would it be? Spend effort in proportion to both.",
+                        "How much trouble am I willing to go to? A control you abandon helps nobody.",
+                        "What happens if I fail? Recovery matters as much as prevention."
+                    )
+                ),
+                Block.Field(
+                    "Write it down",
+                    "A threat model kept only in your head drifts with your mood. " +
+                        "Write it in a private note, date it, and revisit it whenever " +
+                        "your job, relationships, or travel change."
+                )
+            ),
+            references = listOf(
+                Reference("EFF — Surveillance Self-Defense", "https://ssd.eff.org/", "Threat modelling worksheets and examples.")
             )
         )
     )
@@ -872,6 +942,40 @@ private fun chapter02() = Chapter(
                 Reference("SimpleLogin", "https://simplelogin.io/", "Open-source email aliasing."),
                 Reference("addy.io", "https://addy.io/", "Privacy-focused alias management.")
             )
+        ),
+        Brief(
+            id = "backups-restore",
+            title = "Backups That Actually Restore",
+            glyph = "\u21BA",
+            summary = "An untested backup is a rumour. Test the restore.",
+            minutes = 4,
+            blocks = listOf(
+                Block.Para(
+                    "Backups fail in boring ways: the drive was full, the password " +
+                        "was lost, the software stopped running, the file was " +
+                        "corrupt. None of these announce themselves. The only " +
+                        "backup you can trust is one you have restored from."
+                ),
+                Block.Heading("The 3-2-1 habit", "\u25B8"),
+                Block.Numbered(
+                    listOf(
+                        "Keep three copies of anything important: the original plus two backups.",
+                        "Store them on two different kinds of media, for example a drive and a cloud account.",
+                        "Keep one copy somewhere else, away from your home or office.",
+                        "Encrypt the backups, and keep the encryption key or passphrase somewhere you can actually find it.",
+                        "Once a month, restore one real file and open it. If it fails, fix the backup that week."
+                    )
+                ),
+                Block.Field(
+                    "What to back up first",
+                    "Passwords and recovery codes, identity documents, work that " +
+                        "cannot be recreated, and photos with no other copy. " +
+                        "Everything else can wait until those are safe."
+                )
+            ),
+            references = listOf(
+                Reference("CISA", "https://www.cisa.gov/", "Backup and recovery guidance.")
+            )
         )
     )
 )
@@ -1097,6 +1201,41 @@ private fun chapter03() = Chapter(
             references = listOf(
                 Reference("NIST SP 800-88 — Media Sanitization", "https://csrc.nist.gov/pubs/sp/800/88/r1/final", "The authoritative standard for destroying data.")
             )
+        ),
+        Brief(
+            id = "home-base",
+            title = "Home Base",
+            glyph = "\u2302",
+            summary = "Your home network and workspace are a perimeter too.",
+            minutes = 3,
+            blocks = listOf(
+                Block.Para(
+                    "Physical security starts at home: the router, the desk, and " +
+                        "the front door are all part of the same perimeter. A " +
+                        "visitor, a delivery, or a device on your network can " +
+                        "reach further than you think."
+                ),
+                Block.Heading("A short home checklist", "\u25B8"),
+                Block.Bullets(
+                    listOf(
+                        "Change the router admin password, update its firmware, and use a strong Wi-Fi passphrase.",
+                        "Put guests and smart devices on a separate network from your main computers, if your router allows it.",
+                        "Lock the screen whenever you leave the room, even at home.",
+                        "Shred or securely destroy paper with account numbers, codes, or identity details.",
+                        "Keep hardware keys, recovery codes, and spare devices somewhere a visitor would not casually find them."
+                    )
+                ),
+                Block.Field(
+                    "Visitors",
+                    "Guests do not need your Wi-Fi password written on a card, " +
+                        "access to your unlocked computer, or a view of your desk. " +
+                        "Hospitality and security are compatible; they just need " +
+                        "a little planning."
+                )
+            ),
+            references = listOf(
+                Reference("CISA", "https://www.cisa.gov/", "Home network and device security guidance.")
+            )
         )
     )
 )
@@ -1294,6 +1433,40 @@ private fun chapter04() = Chapter(
             ),
             references = listOf(
                 Reference("Social-Engineer.org", "https://www.social-engineer.org/", "Framework, podcast and research on human hacking.")
+            )
+        ),
+        Brief(
+            id = "verifying-strangers",
+            title = "Verifying Strangers",
+            glyph = "\u2713",
+            summary = "Trust is earned through a channel you already trust.",
+            minutes = 3,
+            blocks = listOf(
+                Block.Para(
+                    "Almost every social engineering attack asks you to trust a " +
+                        "stranger through the very channel the attacker controls: " +
+                        "the email, the call, or the message itself. Verification " +
+                        "means stepping outside that channel."
+                ),
+                Block.Heading("Verify out of band", "\u25B8"),
+                Block.Bullets(
+                    listOf(
+                        "For any urgent request involving money, access, or credentials, hang up and call a number you already know, not one supplied in the message.",
+                        "Use a pre-agreed code word for sensitive requests within a team or family.",
+                        "Check the sender domain character by character, not just the display name.",
+                        "Be suspicious of urgency, secrecy, and flattery in combination; that combination is a technique, not a coincidence.",
+                        "When in doubt, pause. A legitimate request survives a ten-minute verification delay."
+                    )
+                ),
+                Block.Field(
+                    "The one exception",
+                    "There is no shortcut that replaces out-of-band verification. " +
+                        "If you cannot verify, do not comply, and report the " +
+                        "request through a channel you trust."
+                )
+            ),
+            references = listOf(
+                Reference("EFF — Surveillance Self-Defense", "https://ssd.eff.org/", "Recognising phishing and impersonation.")
             )
         )
     )
@@ -1496,6 +1669,40 @@ private fun chapter05() = Chapter(
             ),
             references = listOf(
                 Reference("Google SRE — Postmortem Culture", "https://sre.google/sre-book/postmortem-culture/", "The canonical text on blameless review.")
+            )
+        ),
+        Brief(
+            id = "calm-pressure",
+            title = "Calm Under Pressure",
+            glyph = "\u2605",
+            summary = "Pressure is a technique. Slowing down is the defence.",
+            minutes = 3,
+            blocks = listOf(
+                Block.Para(
+                    "Attackers manufacture pressure because a rushed person skips " +
+                        "verification. Urgency, authority, and a ticking clock are " +
+                        "designed to make you act before you think. The defence is " +
+                        "a habit, practised in advance: stop, breathe, verify."
+                ),
+                Block.Heading("The pause routine", "\u25B8"),
+                Block.Numbered(
+                    listOf(
+                        "Stop: put the phone down and do not reply, click, or transfer anything yet.",
+                        "Name the pressure: say to yourself what is being rushed and why.",
+                        "Verify through a channel you trust, as in the verification brief.",
+                        "Decide on the facts, not on the deadline someone else set.",
+                        "Record what happened, so the next attempt is easier to recognise."
+                    )
+                ),
+                Block.Field(
+                    "Practise when calm",
+                    "Run the pause routine on a harmless urgent-looking message " +
+                        "before you need it for a real one. A routine you have " +
+                        "never practised will not appear under stress."
+                )
+            ),
+            references = listOf(
+                Reference("Privacy Guides", "https://www.privacyguides.org/", "Security habits that survive real-world pressure.")
             )
         )
     )
@@ -1725,6 +1932,40 @@ private fun chapter06() = Chapter(
                 Reference("Whonix — DoNot guide", "https://www.whonix.org/wiki/DoNot", "The definitive list of persona mistakes."),
                 Reference("Tails OS", "https://tails.net/", "Amnesic environment for persona work.")
             )
+        ),
+        Brief(
+            id = "photo-metadata",
+            title = "Photo Metadata",
+            glyph = "\u25A3",
+            summary = "A photo can say where, when, and with what it was taken.",
+            minutes = 3,
+            blocks = listOf(
+                Block.Para(
+                    "Photos carry hidden data: location, time, device model, and " +
+                        "sometimes serial numbers. Posted publicly, that metadata " +
+                        "can reveal where you live, work, or travel, and when you " +
+                        "are away from home."
+                ),
+                Block.Heading("Strip before you share", "\u25B8"),
+                Block.Bullets(
+                    listOf(
+                        "Turn off location tagging in your camera app for everyday photos.",
+                        "Strip metadata before posting publicly, using your phone or computer's built-in sharing options or a trusted metadata tool.",
+                        "Check the background of a photo for signs, screens, badges, and reflections before posting.",
+                        "Post travel photos after you return, not while you are away.",
+                        "Remember that other people's photos can expose you too: ask friends not to tag your location."
+                    )
+                ),
+                Block.Field(
+                    "Keep the originals private",
+                    "Stripping a copy for sharing does not delete the original. " +
+                        "Keep originals in encrypted storage, and share only the " +
+                        "stripped copy."
+                )
+            ),
+            references = listOf(
+                Reference("EFF — Surveillance Self-Defense", "https://ssd.eff.org/", "Metadata and photo-sharing guidance.")
+            )
         )
     )
 )
@@ -1913,6 +2154,40 @@ private fun chapter07() = Chapter(
                 Reference("Krebs on Security", "https://krebsonsecurity.com/", "Investigative security journalism."),
                 Reference("Schneier on Security", "https://www.schneier.com/", "Analysis of security, policy and risk."),
                 Reference("Privacy Guides", "https://www.privacyguides.org/", "Continuously updated tool recommendations.")
+            )
+        ),
+        Brief(
+            id = "first-hour",
+            title = "The First Hour After Compromise",
+            glyph = "\u26A0",
+            summary = "Contain, document, and recover from a clean device, in that order.",
+            minutes = 4,
+            blocks = listOf(
+                Block.Para(
+                    "The first hour after a compromise is not the time for a " +
+                        "perfect investigation. It is the time to stop the damage " +
+                        "spreading, write down what happened, and recover from a " +
+                        "device you trust."
+                ),
+                Block.Heading("First hour, in order", "\u25B8"),
+                Block.Numbered(
+                    listOf(
+                        "Isolate the affected device from the network, without powering it off if forensic preservation matters.",
+                        "From a clean device, revoke active sessions and change passwords for the affected accounts.",
+                        "Document the timeline: what was clicked, opened, or shared, and when.",
+                        "Notify the people or team who need to know, through a channel you trust.",
+                        "Preserve logs and screenshots before running any cleanup tool."
+                    )
+                ),
+                Block.Field(
+                    "Do not clean up first",
+                    "Wiping the device before you have documented and preserved " +
+                        "evidence destroys the very information that explains how " +
+                        "the compromise happened, and how to prevent the next one."
+                )
+            ),
+            references = listOf(
+                Reference("CISA", "https://www.cisa.gov/", "Incident response guidance.")
             )
         )
     )

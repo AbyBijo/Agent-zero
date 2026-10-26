@@ -25,7 +25,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -79,7 +82,7 @@ private val PAGES = listOf(
     OnboardPage(
         eyebrow = "What this is",
         title = "A training program, not a toolbox.",
-        body = "Eight chapters take you from beginner hygiene to threat modelling and " +
+        body = "Nine chapters take you from beginner hygiene to threat modelling and " +
             "incident response. Each brief is a few minutes long and ends with references " +
             "you can verify yourself.",
         bullets = listOf(
@@ -119,9 +122,10 @@ private val PAGES = listOf(
  * must tick the ethical-use box before entering — a deliberate friction point.
  */
 @Composable
-fun OnboardingScreen(onComplete: () -> Unit) {
+fun OnboardingScreen(onComplete: (String) -> Unit) {
     var page by rememberSaveable { mutableIntStateOf(0) }
     var acknowledged by rememberSaveable { mutableStateOf(false) }
+    var recruitName by rememberSaveable { mutableStateOf("") }
     val last = page == PAGES.lastIndex
 
     Box(
@@ -258,6 +262,39 @@ fun OnboardingScreen(onComplete: () -> Unit) {
                                             color = if (acknowledged) Ink.White else Ink.Mid
                                         )
                                     }
+                                    Spacer(Modifier.height(18.dp))
+                                    DashRule()
+                                    Spacer(Modifier.height(14.dp))
+                                    Eyebrow("Your name")
+                                    Spacer(Modifier.height(10.dp))
+                                    Text(
+                                        "What should the program call you? Your name stays " +
+                                            "on this device and appears on the home screen.",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = Ink.Mid
+                                    )
+                                    Spacer(Modifier.height(10.dp))
+                                    OutlinedTextField(
+                                        value = recruitName,
+                                        onValueChange = { recruitName = it },
+                                        singleLine = true,
+                                        placeholder = {
+                                            Text(
+                                                "Your name",
+                                                style = MaterialTheme.typography.bodyMedium,
+                                                color = Ink.Dim
+                                            )
+                                        },
+                                        textStyle = MaterialTheme.typography.bodyMedium.copy(color = Ink.White),
+                                        colors = TextFieldDefaults.colors(
+                                            focusedContainerColor = Color.Transparent,
+                                            unfocusedContainerColor = Color.Transparent,
+                                            focusedIndicatorColor = Ink.White,
+                                            unfocusedIndicatorColor = Ink.Rule,
+                                            cursorColor = Ink.White
+                                        ),
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
                                 }
                             }
                         }
@@ -282,7 +319,7 @@ fun OnboardingScreen(onComplete: () -> Unit) {
                         text = "Begin",
                         leading = "\u25B6",
                         enabled = acknowledged,
-                        onClick = onComplete
+                        onClick = { onComplete(recruitName) }
                     )
                 } else {
                     PrimaryButton(

@@ -83,6 +83,13 @@ fun HomeScreen(
                             style = MaterialTheme.typography.labelSmall,
                             color = Ink.Dim
                         )
+                        if (progress.userName.isNotBlank()) {
+                            Text(
+                                "Welcome, ${progress.userName}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Ink.Soft
+                            )
+                        }
                     }
                     Box(
                         Modifier
@@ -116,6 +123,7 @@ fun HomeScreen(
                             ScrambleText(
                                 text = progress.rank,
                                 style = MaterialTheme.typography.headlineMedium,
+                                color = Ink.White,
                                 durationMillis = 700
                             )
                         }
@@ -188,6 +196,7 @@ fun HomeScreen(
                             TypewriterText(
                                 text = brief.title,
                                 style = MaterialTheme.typography.headlineSmall,
+                                color = Ink.White,
                                 charDelayMillis = 24,
                                 startDelayMillis = 200
                             )

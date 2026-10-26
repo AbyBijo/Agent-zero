@@ -26,7 +26,8 @@ data class Progress(
     val diagTaken: Boolean = false,
     val scenariosDone: Set<String> = emptySet(),
     val reduceMotion: Boolean = false,
-    val scanlines: Boolean = true
+    val scanlines: Boolean = true,
+    val userName: String = ""
 ) {
     val briefFraction: Float
         get() = if (Curriculum.totalBriefs == 0) 0f
@@ -95,7 +96,8 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     private data class Prefs(
         val scenarios: Set<String>,
         val reduceMotion: Boolean,
-        val scanlines: Boolean
+        val scanlines: Boolean,
+        val userName: String
     )
 
     private val learning = combine(
@@ -107,8 +109,8 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     ) { best, runs, diag, taken -> Scores(best, runs, diag, taken) }
 
     private val prefs = combine(
-        store.scenariosDone, store.reduceMotion, store.scanlines
-    ) { done, motion, scan -> Prefs(done, motion, scan) }
+        store.scenariosDone, store.reduceMotion, store.scanlines, store.userName
+    ) { done, motion, scan, name -> Prefs(done, motion, scan, name) }
 
     val progress: StateFlow<Progress> = combine(learning, scores, prefs) { l, s, p ->
         Progress(
@@ -122,11 +124,16 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
             diagTaken = s.diagTaken,
             scenariosDone = p.scenarios,
             reduceMotion = p.reduceMotion,
-            scanlines = p.scanlines
+            scanlines = p.scanlines,
+            userName = p.userName
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, Progress())
 
-    fun completeOnboarding() = viewModelScope.launch { store.setOnboarded(true) }
+    fun completeOnboarding(name: String = "") = viewModelScope.launch {
+        if (name.isNotBlank()) store.setUserName(name)
+        store.setOnboarded(true)
+    }
+    fun setUserName(name: String) = viewModelScope.launch { store.setUserName(name) }
     fun toggleBrief(key: String) = viewModelScope.launch { store.toggleBriefComplete(key) }
     fun markBrief(key: String) = viewModelScope.launch { store.markBriefComplete(key) }
     fun toggleCheck(key: String) = viewModelScope.launch { store.toggleCheckItem(key) }

@@ -24,6 +24,8 @@ sealed interface Block {
     data class Heading(val text: String, val glyph: String = "") : Block
     /** Key → value reference table. */
     data class Table(val rows: List<Pair<String, String>>) : Block
+    /** Yellow warning callout — the only non-monochrome block in a brief. */
+    data class Warning(val label: String, val text: String) : Block
     /** An external reference rendered inline with the lesson. */
     data class Link(val title: String, val url: String, val note: String = "") : Block
 }

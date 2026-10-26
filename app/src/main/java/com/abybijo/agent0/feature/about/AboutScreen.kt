@@ -2,6 +2,8 @@ package com.abybijo.agent0.feature.about
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.abybijo.agent0.data.Cases
 import com.abybijo.agent0.data.Checklists
@@ -47,8 +48,9 @@ object Credits {
     const val AUTHOR = "Aby Bijo"
     const val GITHUB = "https://github.com/AbyBijo"
     const val EMAIL_PRIMARY = "Abybijo1978@gmail.com"
-    const val EMAIL_ACADEMIC = "abybijo2025bca@mac.edu.in"
-    const val VERSION = "1.0.0"
+    const val WEBSITE = "https://abybijo.com"
+    const val BUY_ME_A_COFFEE = "https://www.buymeacoffee.com/AbyBijo"
+    const val VERSION = "1.0.1"
 }
 
 @Composable
@@ -98,11 +100,12 @@ fun AboutScreen(onNavigate: (String) -> Unit) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Agent0Logo(size = 104.dp, spin = true)
-                    Spacer(Modifier.height(20.dp))
+                    Agent0Logo(size = 88.dp, spin = true)
+                    Spacer(Modifier.height(16.dp))
                     ScrambleText(
                         text = "AGENT-0",
                         style = MaterialTheme.typography.displayLarge,
+                        color = Ink.White,
                         durationMillis = 800
                     )
                     Spacer(Modifier.height(8.dp))
@@ -126,37 +129,38 @@ fun AboutScreen(onNavigate: (String) -> Unit) {
                     ) {
                         Text(
                             "With love",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.bodySmall,
                             color = Ink.Mid
                         )
-                        Spacer(Modifier.height(8.dp))
+                        Spacer(Modifier.height(6.dp))
                         Text(
                             "By ${Credits.AUTHOR}",
-                            style = MaterialTheme.typography.headlineMedium,
+                            style = MaterialTheme.typography.titleMedium,
                             color = Ink.White,
                             textAlign = TextAlign.Center
                         )
                     }
-                    Spacer(Modifier.height(20.dp))
+                    Spacer(Modifier.height(14.dp))
                     DashRule()
-                    Spacer(Modifier.height(6.dp))
-
-                    ContactRow(
-                        label = "GitHub",
-                        value = "github.com/AbyBijo",
-                        onClick = { openUrl(Credits.GITHUB) }
-                    )
-                    DashRule()
-                    ContactRow(
-                        label = "Email",
-                        value = Credits.EMAIL_PRIMARY,
-                        onClick = { sendMail(Credits.EMAIL_PRIMARY) }
-                    )
-                    DashRule()
-                    ContactRow(
-                        label = "Academic",
-                        value = Credits.EMAIL_ACADEMIC,
-                        onClick = { sendMail(Credits.EMAIL_ACADEMIC) }
+                    Spacer(Modifier.height(14.dp))
+                    // Icon-only links: GitHub, official email, website.
+                    // The academic email is intentionally not shown here.
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        IconLink(label = "GH", onClick = { openUrl(Credits.GITHUB) })
+                        Spacer(Modifier.width(12.dp))
+                        IconLink(label = "@", onClick = { sendMail(Credits.EMAIL_PRIMARY) })
+                        Spacer(Modifier.width(12.dp))
+                        IconLink(label = "\u2302", onClick = { openUrl(Credits.WEBSITE) })
+                    }
+                    Spacer(Modifier.height(16.dp))
+                    com.abybijo.agent0.ui.components.PrimaryButton(
+                        text = "Buy me a coffee",
+                        leading = "\u2615",
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { openUrl(Credits.BUY_ME_A_COFFEE) }
                     )
                 }
             }
@@ -310,28 +314,21 @@ fun AboutScreen(onNavigate: (String) -> Unit) {
     }
 }
 
+/** Small bordered icon link used for the developer contact row. */
 @Composable
-private fun ContactRow(label: String, value: String, onClick: () -> Unit) {
-    Row(
+private fun IconLink(label: String, onClick: () -> Unit) {
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .clip(RoundedCornerShape(2.dp))
+            .border(BorderStroke(1.dp, Ink.Rule), RoundedCornerShape(2.dp))
             .noRippleClickable(onClick = onClick)
-            .padding(vertical = 14.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        contentAlignment = Alignment.Center
     ) {
         Text(
-            label.uppercase(),
-            style = MaterialTheme.typography.labelSmall,
-            color = Ink.Dim,
-            modifier = Modifier.width(84.dp)
+            label,
+            style = MaterialTheme.typography.titleMedium,
+            color = Ink.White
         )
-        Text(
-            value,
-            style = MaterialTheme.typography.bodyMedium,
-            color = Ink.White,
-            textDecoration = TextDecoration.Underline,
-            modifier = Modifier.weight(1f)
-        )
-        Text("\u2197", style = MaterialTheme.typography.bodyMedium, color = Ink.Mid)
     }
 }

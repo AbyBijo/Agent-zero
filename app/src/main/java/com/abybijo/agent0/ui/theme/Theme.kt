@@ -31,6 +31,11 @@ object Ink {
     val Mid = Color(0xFF9A9A9A)
     val Soft = Color(0xFFC8C8C8)
     val White = Color(0xFFFFFFFF)
+    // The only non-monochrome text colours in the app, reserved for
+    // warnings (yellow) and suggestions that need attention (red is
+    // used only for genuine danger callouts, never for body text).
+    val Warning = Color(0xFFFFC107)
+    val Alert = Color(0xFFE53935)
     val Scan = Color(0x0DFFFFFF)
 }
 

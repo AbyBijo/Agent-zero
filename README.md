@@ -47,7 +47,7 @@ cover one corner of the problem. Agent-0 brings the discipline together:
   choice, then show the consequence of that choice.
 - **Self-assessment** — a weighted diagnostic and a quiz bank with rationales,
   so you can see where you are weak instead of guessing.
-- **Real-world grounding** — 57 documented breach case files and 67 vetted
+- **Real-world grounding** — 59 documented breach case files and 67 vetted
   external references, so the lessons are tied to failures that actually
   happened.
 - **Privacy as architecture, not policy** — the app declares zero Android
@@ -93,11 +93,11 @@ cover one corner of the problem. Agent-0 brings the discipline together:
 | Subsystem | Volume |
 |---|---|
 | Chapters | 8, graded Beginner → Advanced |
-| Briefs (lessons) | 35, ~135 minutes total |
+| Briefs (lessons) | 49, ~186 minutes total |
 | Scenario drills | 38 branching drills, every path verified reachable |
-| Quiz bank | 35 questions, each with a rationale |
-| Checklist items | 77, across 8 operational routines |
-| Case files | 57 documented breaches |
+| Quiz bank | 45 questions, each with a rationale |
+| Checklist items | 85, across 9 operational routines |
+| Case files | 59 documented breaches |
 | External references | 67 vetted links, plus 71 in-brief citations |
 | Self-diagnostic | 24 weighted controls |
 
@@ -134,8 +134,8 @@ natively in Compose.
 
 - **Scenario drills** — branching decisions with verified-reachable paths.
   Wrong choices are instructive, not just marked wrong.
-- **Quiz** — 35 questions, each with a rationale explaining the answer.
-- **Checklists** — 77 items across 8 operational routines, for repeatable
+- **Quiz** — 45 questions, each with a rationale explaining the answer.
+- **Checklists** — 85 items across 9 operational routines, for repeatable
   habits rather than one-off reading.
 - **Passphrase Lab** — practise passphrase thinking in memory only. Nothing
   typed in the lab is stored or logged.
@@ -148,7 +148,7 @@ natively in Compose.
 
 ### Reference
 
-- **Case archive** — 57 case files on real breaches, to study what failed and
+- **Case archive** — 59 case files on real breaches, to study what failed and
   why.
 - **Resource library** — 67 vetted external references. Links open in your
   browser through the system chooser, so you always verify third-party sources
@@ -254,11 +254,11 @@ com.abybijo.agent0
 ├── AppViewModel.kt            Progress state, strongly-typed flow combination
 ├── data/
 │   ├── Models.kt              Domain types (Chapter, Brief, Block, Scenario…)
-│   ├── Curriculum.kt          All 8 chapters / 35 briefs, hand-authored
-│   ├── Cases.kt               57 case studies
+│   ├── Curriculum.kt          All 9 chapters / 49 briefs, hand-authored
+│   ├── Cases.kt               59 case studies
 │   ├── Scenarios.kt           38 branching drills
-│   ├── QuizBank.kt            35 questions + rationales
-│   ├── Checklists.kt          77 checklist items
+│   ├── QuizBank.kt            45 questions + rationales
+│   ├── Checklists.kt          85 checklist items
 │   ├── Diagnostic.kt          24 weighted controls + grading
 │   ├── Resources.kt           67 external references
 │   └── Prefs.kt               DataStore persistence (the only I/O in the app)

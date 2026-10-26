@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
@@ -34,6 +35,7 @@ class Agent0Store(private val context: Context) {
         val SCENARIOS_DONE = stringSetPreferencesKey("scenarios_done")
         val REDUCE_MOTION = booleanPreferencesKey("reduce_motion")
         val SCANLINES = booleanPreferencesKey("scanlines")
+        val USER_NAME = stringPreferencesKey("user_name")
     }
 
     private val prefs: Flow<Preferences> = context.dataStore.data
@@ -50,6 +52,7 @@ class Agent0Store(private val context: Context) {
     val scenariosDone: Flow<Set<String>> = prefs.map { it[Keys.SCENARIOS_DONE] ?: emptySet() }
     val reduceMotion: Flow<Boolean> = prefs.map { it[Keys.REDUCE_MOTION] ?: false }
     val scanlines: Flow<Boolean> = prefs.map { it[Keys.SCANLINES] ?: true }
+    val userName: Flow<String> = prefs.map { it[Keys.USER_NAME] ?: "" }
 
     suspend fun setOnboarded(value: Boolean) =
         context.dataStore.edit { it[Keys.ONBOARDED] = value }
@@ -98,6 +101,9 @@ class Agent0Store(private val context: Context) {
 
     suspend fun setScanlines(value: Boolean) =
         context.dataStore.edit { it[Keys.SCANLINES] = value }
+
+    suspend fun setUserName(value: String) =
+        context.dataStore.edit { it[Keys.USER_NAME] = value.trim() }
 
     /** Full local wipe — the app's own "burn" function. */
     suspend fun wipeAll() = context.dataStore.edit { it.clear() }

@@ -16,7 +16,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,11 +52,57 @@ fun SettingsScreen(
     onBack: () -> Unit,
     onReduceMotion: (Boolean) -> Unit,
     onScanlines: (Boolean) -> Unit,
+    onUserName: (String) -> Unit,
     onWipe: () -> Unit
 ) {
     var confirmWipe by remember { mutableStateOf(false) }
+    var nameDraft by remember { mutableStateOf(progress.userName) }
 
     Agent0Screen(title = "Settings", eyebrow = "Local configuration", onBack = onBack) {
+        item {
+            Spacer(Modifier.height(14.dp))
+            RevealIn {
+                Panel {
+                    Eyebrow("Your name")
+                    Spacer(Modifier.height(10.dp))
+                    Text(
+                        "Shown on the home screen. Stored only on this device.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Ink.Mid
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    OutlinedTextField(
+                        value = nameDraft,
+                        onValueChange = { nameDraft = it },
+                        singleLine = true,
+                        placeholder = {
+                            Text(
+                                "Your name",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Ink.Dim
+                            )
+                        },
+                        textStyle = MaterialTheme.typography.bodyMedium.copy(color = Ink.White),
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedIndicatorColor = Ink.White,
+                            unfocusedIndicatorColor = Ink.Rule,
+                            cursorColor = Ink.White
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    GhostButton(
+                        text = "Save name",
+                        enabled = nameDraft.isNotBlank() && nameDraft != progress.userName,
+                        onClick = { onUserName(nameDraft) }
+                    )
+                }
+            }
+            Spacer(Modifier.height(14.dp))
+        }
+
         item {
             Spacer(Modifier.height(14.dp))
             RevealIn {

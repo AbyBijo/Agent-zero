@@ -216,6 +216,66 @@ object QuizBank {
             answerIndex = 2,
             rationale = "Clean devices limit the blast radius of device seizure."
         ),
+        QuizQuestion(
+            prompt = "Before discussing sensitive matters on a new messenger, what should you verify?",
+            options = listOf("The contact's profile photo", "Safety numbers or key fingerprints through a second trusted channel", "That the app is popular", "That messages disappear quickly"),
+            answerIndex = 1,
+            rationale = "Key verification through a second channel proves who holds the other end of the encryption."
+        ),
+        QuizQuestion(
+            prompt = "What is the safest device strategy for crossing a border?",
+            options = listOf("Carry every file you own", "Travel with a clean, encrypted device holding only trip essentials", "Leave the device unlocked for inspection", "Store backups on the travel device only"),
+            answerIndex = 1,
+            rationale = "A clean device limits what can be inspected, copied, or held."
+        ),
+        QuizQuestion(
+            prompt = "Which financial habit best limits the damage of a merchant breach?",
+            options = listOf("Using one card everywhere", "Using a separate card or virtual card for online shopping", "Sharing card details by email", "Never reviewing statements"),
+            answerIndex = 1,
+            rationale = "Separating payment methods keeps a merchant breach away from your main account."
+        ),
+        QuizQuestion(
+            prompt = "If you suspect you are being observed at work, what is the best first step?",
+            options = listOf("Confront the person watching", "Lower exposure, move sensitive work to a safer place, and contact a trusted person", "Discuss the matter more loudly", "Leave sensitive documents on your desk"),
+            answerIndex = 1,
+            rationale = "Reducing exposure and escalating through trusted contacts is safer than confrontation."
+        ),
+        QuizQuestion(
+            prompt = "What is the most important team OPSEC rule to agree before work starts?",
+            options = listOf("Everyone uses their favourite app", "One channel for sensitive discussion, a verification code word, and need-to-know access", "No rules, to avoid friction", "Share all credentials with the team"),
+            answerIndex = 1,
+            rationale = "Agreed channels and verification stop impersonation and accidental exposure across a team."
+        ),
+        QuizQuestion(
+            prompt = "How often should you test a backup restore?",
+            options = listOf("Never, backups just work", "Once a month, restoring one real file", "Only after a disaster", "Once every five years"),
+            answerIndex = 1,
+            rationale = "Regular restore tests are the only proof a backup actually works."
+        ),
+        QuizQuestion(
+            prompt = "What does a good ten-minute threat model answer first?",
+            options = listOf("Which VPN to buy", "What you want to protect and from whom", "Which phone is best", "How to hide online completely"),
+            answerIndex = 1,
+            rationale = "Protecting the right things against the right adversary is the foundation of every control choice."
+        ),
+        QuizQuestion(
+            prompt = "What should you strip from a photo before posting it publicly?",
+            options = listOf("The caption", "Location, time, and device metadata", "The colours", "The filename only"),
+            answerIndex = 1,
+            rationale = "Photo metadata can reveal where and when a photo was taken."
+        ),
+        QuizQuestion(
+            prompt = "What is the first step in the first hour after a compromise?",
+            options = listOf("Wipe the device immediately", "Isolate the device from the network and document what happened", "Ignore it and hope it stops", "Post about it on social media"),
+            answerIndex = 1,
+            rationale = "Isolation stops spread, and documentation preserves the evidence needed to recover."
+        ),
+        QuizQuestion(
+            prompt = "Why does a security posture decay over time?",
+            options = listOf("It does not decay", "Accounts, permissions, and backups drift without maintenance", "Attackers get bored", "Devices get faster"),
+            answerIndex = 1,
+            rationale = "Without a maintenance rhythm, permissions widen and untested backups fail silently."
+        ),
     )
 
     /** Deterministic-per-session shuffle of [count] questions. */

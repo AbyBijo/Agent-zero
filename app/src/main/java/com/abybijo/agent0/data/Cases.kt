@@ -754,6 +754,32 @@ object Cases {
                 "Identity providers are the ultimate high-value target; their internal security must be flawless."
             )
         ),
+        CaseStudy(
+            id = "att-2024",
+            title = "AT&T Call Records Breach (2024)",
+            year = "2024",
+            tags = listOf("Telecom", "Metadata", "Third-Party Cloud"),
+            summary = "In 2024, AT&T disclosed that call and text records belonging to a very large number of its customers were downloaded without authorisation from a third-party cloud platform used by the company.",
+            details = "The records were metadata, such as numbers called and texted and the dates of those communications, rather than the content of calls or messages. AT&T reported that the data was downloaded from a third-party cloud workspace, which underlines how a vendor platform can become the route into data held by a much larger company.",
+            lessons = listOf(
+                "Metadata is sensitive: who you contacted, and when, can reveal relationships and routines even without message content.",
+                "Third-party cloud platforms are part of your attack surface; their access controls matter as much as your own.",
+                "When a provider reports a breach, check what categories of your data were involved and change any credentials or settings the provider advises."
+            )
+        ),
+        CaseStudy(
+            id = "npd-2024",
+            title = "National Public Data Breach (2024)",
+            year = "2024",
+            tags = listOf("Data Broker", "Identity Theft", "PII"),
+            summary = "In 2024, a breach at National Public Data, a background-check data broker, exposed personal data of a very large number of people, including Social Security numbers and other identifying details, much of it collected without those people having a direct relationship with the company.",
+            details = "Data brokers aggregate personal information from many sources and sell background-check services. Because the data was gathered about people who had not chosen to share it with the broker, many affected people learned of the exposure only through breach reports and lawsuits that followed.",
+            lessons = listOf(
+                "Data you never knowingly shared can still be breached; data-broker collection is a risk you did not choose.",
+                "Social Security numbers and other identifiers cannot be changed easily, so breaches of them have long-lasting consequences.",
+                "Freezing credit, monitoring accounts, and requesting removal from data brokers are practical steps after an identity-data breach."
+            )
+        ),
     )
 
     val years: List<String> = all.map { it.year }.distinct().sortedDescending()

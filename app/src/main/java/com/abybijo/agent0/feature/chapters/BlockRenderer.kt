@@ -123,6 +123,25 @@ fun BlockView(block: Block, onOpenUrl: (String) -> Unit) {
             }
         }
 
+        is Block.Warning -> Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .clip(RoundedCornerShape(2.dp))
+                .background(Ink.Void)
+                .border(1.dp, Ink.Warning, RoundedCornerShape(2.dp))
+        ) {
+            Column(Modifier.padding(16.dp)) {
+                Eyebrow(block.label, color = Ink.Warning)
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    block.text,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Ink.Soft
+                )
+            }
+        }
+
         is Block.Terminal -> Box(
             modifier = Modifier
                 .fillMaxWidth()

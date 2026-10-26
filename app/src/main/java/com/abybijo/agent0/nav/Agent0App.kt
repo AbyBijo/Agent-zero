@@ -45,6 +45,7 @@ import com.abybijo.agent0.feature.intel.CasesScreen
 import com.abybijo.agent0.feature.intel.IntelScreen
 import com.abybijo.agent0.feature.intel.ResourcesScreen
 import com.abybijo.agent0.feature.onboarding.BootScreen
+import com.abybijo.agent0.feature.onboarding.NamePromptScreen
 import com.abybijo.agent0.feature.onboarding.OnboardingScreen
 import com.abybijo.agent0.ui.components.crtScanlines
 import com.abybijo.agent0.ui.theme.Ink
@@ -61,7 +62,20 @@ fun Agent0App(viewModel: AppViewModel, progress: Progress) {
         return
     }
     if (!progress.onboarded) {
-        OnboardingScreen(onComplete = { viewModel.completeOnboarding() })
+        OnboardingScreen(onComplete = { name -> viewModel.completeOnboarding(name) })
+        return
+    }
+    // Recruits who onboarded before v1.0.1 have no stored name yet.
+    // Ask once; skipping is allowed and the name can be set in Settings.
+    var namePromptDone by remember { mutableStateOf(false) }
+    if (progress.userName.isBlank() && !namePromptDone) {
+        NamePromptScreen(
+            onContinue = { name ->
+                viewModel.setUserName(name)
+                namePromptDone = true
+            },
+            onSkip = { namePromptDone = true }
+        )
         return
     }
     MainScaffold(viewModel = viewModel, progress = progress)
@@ -271,6 +285,7 @@ private fun Agent0NavHost(
                 onBack = { nav.popBackStack() },
                 onReduceMotion = { viewModel.setReduceMotion(it) },
                 onScanlines = { viewModel.setScanlines(it) },
+                onUserName = { viewModel.setUserName(it) },
                 onWipe = { viewModel.wipe() }
             )
         }

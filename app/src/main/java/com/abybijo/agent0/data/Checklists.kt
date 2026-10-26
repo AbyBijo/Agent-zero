@@ -138,6 +138,21 @@ object Checklists {
                 "Document all findings and assign risk scores to prioritize remediation"
             )
         ),
+        ChecklistGroup(
+            id = "fieldcraft",
+            title = "Fieldcraft",
+            glyph = "\u2694",
+            items = listOf(
+                "Agree the secure channel and verification code word before sensitive work starts",
+                "Verify safety numbers or key fingerprints through a second trusted channel",
+                "Travel with a clean, encrypted device holding only trip essentials",
+                "Back up at home before travelling, and wipe the travel device on return",
+                "Review statements monthly for charges you do not recognise",
+                "Strip photo metadata before posting publicly, and post travel photos after returning",
+                "Keep sensitive conversations out of overheard or overlooked places",
+                "Run the monthly rhythm: diagnostic, backup restore test, and permission review"
+            )
+        ),
     )
 
     val totalItems: Int = groups.sumOf { it.items.size }

@@ -72,6 +72,10 @@ fun TypewriterText(
     text: String,
     modifier: Modifier = Modifier,
     style: TextStyle = LocalTextStyle.current,
+    // Headings in this app must render white, never the platform default
+    // content colour — on a black canvas the default left several headings
+    // (Clearance rank, Start Here title, About title) nearly invisible.
+    color: androidx.compose.ui.graphics.Color = Ink.White,
     charDelayMillis: Int = 18,
     startDelayMillis: Int = 0,
     showCursor: Boolean = true,
@@ -110,6 +114,7 @@ fun TypewriterText(
             }
         },
         style = style,
+        color = color,
         modifier = modifier
     )
 }
@@ -123,6 +128,8 @@ fun ScrambleText(
     text: String,
     modifier: Modifier = Modifier,
     style: TextStyle = LocalTextStyle.current,
+    // See TypewriterText: headings must be white by default on this canvas.
+    color: androidx.compose.ui.graphics.Color = Ink.White,
     durationMillis: Int = Motion.Cinematic,
     delayMillis: Int = 0
 ) {
@@ -151,7 +158,7 @@ fun ScrambleText(
         buildAnnotatedString {
             text.forEachIndexed { i, c ->
                 when {
-                    i < locked || c == ' ' -> append(c)
+                    i < locked || c == ' ' -> withStyle(SpanStyle(color = color)) { append(c) }
                     else -> withStyle(SpanStyle(color = Ink.Dim)) {
                         append(charset[Random.nextInt(charset.size)])
                     }
@@ -159,7 +166,7 @@ fun ScrambleText(
             }
         }
     }
-    Text(text = rendered, style = style, modifier = modifier)
+    Text(text = rendered, style = style, color = color, modifier = modifier)
 }
 
 /** Shared blinking-cursor clock. */
