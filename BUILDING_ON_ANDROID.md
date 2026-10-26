@@ -20,7 +20,7 @@ Agent-0 needs things that shipped *after* AIDE stopped being updated:
 
 | Agent-0 requires | AIDE provides |
 |---|---|
-| compileSdk 34 (Android 14) | bundled SDK ~API 29/30 |
+| compileSdk 36 (Android 16) | bundled SDK ~API 29/30 |
 | Jetpack Compose + compose compiler plugin | no Compose support at all |
 | Android Gradle Plugin 8.x | AIDE's own non-Gradle builder |
 | JDK 17 | JDK 8 era toolchain |
@@ -47,7 +47,7 @@ exactly what this project needs.
    or F-Droid.
 2. Open its **Terminal** and install the SDK components:
    ```bash
-   sdkmanager --install "platforms;android-34" "build-tools;34.0.0"
+   sdkmanager --install "platforms;android-36" "build-tools;36.0.0"
    ```
 3. In AndroidIDE, choose **Open existing project** and select the `agent0` folder.
 4. Set the JDK to **17** in Settings → Build & Run.
@@ -82,7 +82,7 @@ repo already contains the workflow at `.github/workflows/build.yml`.
    **Agent-0-debug-apk**.
 5. Unzip on your phone and install the APK (allow "install unknown apps").
 
-The workflow uses a pinned Gradle 8.7 directly, so the missing
+The workflow uses a pinned Gradle 8.13 directly, so the missing
 `gradle-wrapper.jar` is not a problem.
 
 ---
@@ -94,7 +94,7 @@ Prefer options 1 or 2. If you want it anyway:
 
 ```bash
 pkg install openjdk-17 gradle wget unzip
-# then install cmdline-tools + platforms;android-34 + build-tools;34.0.0
+# then install cmdline-tools + platforms;android-36 + build-tools;36.0.0
 # set ANDROID_HOME, then:
 cd agent0 && gradle assembleDebug
 ```

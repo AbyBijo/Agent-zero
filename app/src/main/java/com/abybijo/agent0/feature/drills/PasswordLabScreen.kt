@@ -149,7 +149,7 @@ fun PasswordLabScreen(onBack: () -> Unit) {
                         }
                     }
                     Spacer(Modifier.height(16.dp))
-                    AsciiBar((analysis.bits / 100f).coerceIn(0f, 1f), slots = 22, showPercent = false)
+                    AsciiBar((analysis.bits.toFloat() / 100f).coerceIn(0f, 1f), slots = 22, showPercent = false)
                     Spacer(Modifier.height(18.dp))
                     DashRule()
                     Spacer(Modifier.height(14.dp))

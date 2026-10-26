@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextGeometricTransform
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 
@@ -84,8 +83,7 @@ private val Agent0Typography = Typography(
     ),
     labelSmall = TextStyle(
         fontFamily = Mono, fontWeight = FontWeight.Bold, fontSize = 10.sp,
-        lineHeight = 14.sp, letterSpacing = 1.6.sp,
-        textGeometricTransform = TextGeometricTransform.None
+        lineHeight = 14.sp, letterSpacing = 1.6.sp
     )
 )
 

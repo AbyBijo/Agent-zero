@@ -1,19 +1,63 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
     namespace = "com.abybijo.agent0"
-    compileSdk = 34
+    // Android 16 (API 36). minSdk stays 24, so the app still runs on
+    // Android 7.0+ devices; only the compile/target level moves up.
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.abybijo.agent0"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0.0"
         vectorDrawables { useSupportLibrary = true }
+    }
+
+    signingConfigs {
+        // Debug: the SDK's automatic debug key, but with the signature
+        // schemes made explicit instead of left to defaults.
+        // v1 is disabled: it is only needed below Android 7.0, and
+        // minSdk is 24 (Android 7.0), where v2 already applies.
+        getByName("debug") {
+            enableV1Signing = false
+            enableV2Signing = true
+            enableV3Signing = true
+        }
+        // Release: keystore details come from Gradle properties or
+        // environment variables, never from a committed file.
+        // Properties: agent0.keystore, agent0.keystorePassword,
+        // agent0.keyAlias, agent0.keyPassword
+        // (or AGENT0_KEYSTORE, AGENT0_KEYSTORE_PASSWORD,
+        // AGENT0_KEY_ALIAS, AGENT0_KEY_PASSWORD).
+        // If no keystore is supplied, this config is not applied to
+        // the release build type below, so a debug/CI build without a
+        // keystore does not fail at configuration time.
+        create("release") {
+            val keystorePath =
+                (project.findProperty("agent0.keystore") as String?)
+                    ?: System.getenv("AGENT0_KEYSTORE")
+            if (keystorePath != null) {
+                storeFile = file(keystorePath)
+            }
+            storePassword =
+                (project.findProperty("agent0.keystorePassword") as String?)
+                    ?: System.getenv("AGENT0_KEYSTORE_PASSWORD")
+            keyAlias =
+                (project.findProperty("agent0.keyAlias") as String?)
+                    ?: System.getenv("AGENT0_KEY_ALIAS")
+            keyPassword =
+                (project.findProperty("agent0.keyPassword") as String?)
+                    ?: System.getenv("AGENT0_KEY_PASSWORD")
+            enableV1Signing = false
+            enableV2Signing = true
+            enableV3Signing = true
+        }
     }
 
     buildTypes {
@@ -24,9 +68,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // Only sign release when a keystore was actually supplied.
+            val releaseSigning = signingConfigs.getByName("release")
+            if (releaseSigning.storeFile != null) {
+                signingConfig = releaseSigning
+            }
         }
         debug {
             applicationIdSuffix = ".debug"
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -40,16 +90,13 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
-    }
     packaging {
         resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" }
     }
 }
 
 dependencies {
-    val composeBom = platform("androidx.compose:compose-bom:2024.06.00")
+    val composeBom = platform("androidx.compose:compose-bom:2025.10.01")
     implementation(composeBom)
 
     implementation("androidx.core:core-ktx:1.13.1")

@@ -2,8 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform: Android](https://img.shields.io/badge/Platform-Android-3DDC84.svg)](https://developer.android.com)
-[![Kotlin](https://img.shields.io/badge/Kotlin-1.9.24-7F52FF.svg)](https://kotlinlang.org)
-[![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-BOM%202024.06.00-4285F4.svg)](https://developer.android.com/jetpack/compose)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.2.21-7F52FF.svg)](https://kotlinlang.org)
+[![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-BOM%202025.10.01-4285F4.svg)](https://developer.android.com/jetpack/compose)
 [![minSdk](https://img.shields.io/badge/minSdk-24-brightgreen.svg)](app/build.gradle.kts)
 [![Offline](https://img.shields.io/badge/Offline-Zero%20permissions-black.svg)](app/src/main/AndroidManifest.xml)
 
@@ -79,9 +79,10 @@ cover one corner of the problem. Agent-0 brings the discipline together:
 |---|---|
 | **Version** | 1.0.0 (`versionCode` 1) |
 | **Platform** | Android 7.0+ (`minSdk` 24) |
-| **Language / UI** | Kotlin 1.9.24 · Jetpack Compose (BOM 2024.06.00) · Material 3 |
-| **Build** | Android Gradle Plugin 8.5.2 · Gradle 8.7 · JDK 17 |
-| **Target / compile SDK** | 34 |
+| **Language / UI** | Kotlin 2.2.21 · Jetpack Compose (BOM 2025.10.01) · Material 3 |
+| **Build** | Android Gradle Plugin 8.11.1 · Gradle 8.13 · JDK 17 |
+| **Target / compile SDK** | 36 (Android 16) |
+| **Signing** | Debug and release: APK Signature Scheme v2 + v3 (v1 disabled; minSdk is 24, so v2 already covers all supported devices). Release key comes from Gradle properties / environment, never from a committed file. |
 | **Network** | None — zero permissions declared |
 | **Accounts / analytics / ads** | None — everything is unlocked |
 | **Storage** | Local only, via DataStore · cloud backup disabled |
@@ -210,9 +211,9 @@ guide.
 
 - Android Studio Koala or newer (for the IDE route)
 - JDK 17
-- Android SDK 34
-- Gradle 8.7 (for the command-line route — the repository ships wrapper
-  properties for 8.7 but no wrapper JAR, matching the CI setup)
+- Android SDK 36
+- Gradle 8.13 (for the command-line route — the repository ships wrapper
+  properties for 8.13 but no wrapper JAR, matching the CI setup)
 
 ### Clone
 
@@ -237,9 +238,9 @@ used in place of `gradle` above.
 | Setting | Value |
 |---|---|
 | `applicationId` | `com.abybijo.agent0` (debug builds add `.debug`) |
-| `minSdk` / `targetSdk` / `compileSdk` | 24 / 34 / 34 |
-| Kotlin | 1.9.24 (Compose compiler extension 1.5.14) |
-| Compose | BOM 2024.06.00, Material 3 |
+| `minSdk` / `targetSdk` / `compileSdk` | 24 / 36 / 36 |
+| Kotlin | 2.2.21 (Compose compiler plugin 2.2.21) |
+| Compose | BOM 2025.10.01, Material 3 |
 | Architecture | Single activity, Compose Navigation, `AndroidViewModel` + DataStore |
 | Release build | Minification and resource shrinking enabled (`proguard-rules.pro`) |
 
