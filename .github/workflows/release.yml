@@ -1,0 +1,60 @@
+name: Release Agent-0
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag (e.g. v1.0.1)'
+        required: true
+        default: 'v1.0.1'
+permissions:
+  contents: write
+jobs:
+  release:
+    name: Build and publish release
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Android SDK packages
+        run: |
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then
+            SDKMANAGER="$(find "$ANDROID_HOME" -name sdkmanager -type f 2>/dev/null | head -n 1)"
+          fi
+          if [ -z "$SDKMANAGER" ]; then
+            echo "sdkmanager not found; using preinstalled SDK packages"
+          else
+            yes | "$SDKMANAGER" --licenses >/dev/null || true
+            "$SDKMANAGER" "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+          fi
+      - name: Set up Gradle 8.13
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+      - name: Restore release keystore
+        run: |
+          echo "${{ secrets.AGENT0_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/agent0-release.keystore"
+          ls -lh "$RUNNER_TEMP/agent0-release.keystore"
+      - name: Build release and debug APKs
+        env:
+          AGENT0_KEYSTORE: ${{ runner.temp }}/agent0-release.keystore
+          AGENT0_KEYSTORE_PASSWORD: ${{ secrets.AGENT0_KEYSTORE_PASSWORD }}
+          AGENT0_KEY_ALIAS: ${{ secrets.AGENT0_KEY_ALIAS }}
+          AGENT0_KEY_PASSWORD: ${{ secrets.AGENT0_KEY_PASSWORD }}
+        run: ./gradlew assembleRelease assembleDebug --no-daemon --stacktrace
+      - name: Verify APKs
+        run: |
+          ls -lh app/build/outputs/apk/release/ app/build/outputs/apk/debug/
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose --min-sdk-version 24 app/build/outputs/apk/release/app-release.apk
+          "$ANDROID_HOME/build-tools/36.0.0/apksigner" verify --verbose --min-sdk-version 24 app/build/outputs/apk/debug/app-debug.apk
+      - name: Publish releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ inputs.release_tag }}" app/build/outputs/apk/release/app-release.apk --title "Agent-0 ${{ inputs.release_tag }}" --notes "Agent-0 ${{ inputs.release_tag }} — offline OPSEC training. Release APK (package com.abybijo.agent0), signed with the release key (SHA256 0E:EF:C0:4E:FD:C0:2E:60:37:CD:5F:BF:5C:A1:E6:4D:3C:1A:36:65:6E:45:F5:02:A4:61:71:8F:ED:90:D5:D4). 9 chapters, 49 briefs, 45 quiz questions, 85 checklist items, 59 case files."
+          gh release create "${{ inputs.release_tag }}-debug" app/build/outputs/apk/debug/app-debug.apk --prerelease --title "Agent-0 ${{ inputs.release_tag }}-debug (developer build)" --notes "Developer build of Agent-0 ${{ inputs.release_tag }} (package com.abybijo.agent0.debug), signed with the debug key. For developers and testers; end users should install the main ${{ inputs.release_tag }} release instead."
