@@ -1,5 +1,8 @@
 package com.abybijo.agent0.feature.profile
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -53,7 +56,7 @@ object Avatars {
 /**
  * v2.0 Profile page (SRS §8). Replaces About as a top-level page.
  * Shows name, age (display-only, never gates content), progress,
- * bookmarks, per-brief badges, and the certificate section at the end.
+ * bookmarks, chapter badges, and the certificate section at the end.
  * Certificate gate (Phase 5d, user decision 2026-10-27): all briefs
  * complete AND the final exam passed. PNG/PDF/share arrive in 5e.
  */
@@ -343,33 +346,70 @@ fun ProfileScreen(
         }
 
         // ── badges ──────────────────────────────────────────────────
+        // v2.0.1: badges are chapter-only, shown in a grid, and unlock
+        // only when the whole chapter is complete.
         item {
             RevealIn {
                 Panel(background = Ink.Void) {
-                    Eyebrow("Badges \u00B7 one per completed brief")
+                    val chaptersEarned = Curriculum.chapters.count {
+                        progress.chapterDone(it.id) == it.briefs.size
+                    }
+                    Eyebrow("Badges \u00B7 one per completed chapter")
                     Spacer(Modifier.height(10.dp))
                     Text(
-                        "${progress.completedBriefs.size} earned \u00B7 " +
-                            "${Curriculum.totalBriefs - progress.completedBriefs.size} locked",
+                        "$chaptersEarned earned \u00B7 " +
+                            "${Curriculum.chapters.size - chaptersEarned} locked",
                         style = MaterialTheme.typography.titleMedium,
                         color = Ink.White
                     )
                     Spacer(Modifier.height(10.dp))
                     Text(
-                        "A badge is earned only by completing its brief. " +
-                            "There is no leaderboard — these are your own marks, on this device only.",
+                        "A chapter badge unlocks only when every brief in that " +
+                            "chapter is complete. There is no leaderboard — these " +
+                            "are your own marks, on this device only.",
                         style = MaterialTheme.typography.bodySmall,
                         color = Ink.Mid
                     )
-                    if (progress.completedBriefs.isNotEmpty()) {
-                        Spacer(Modifier.height(12.dp))
-                        progress.completedBriefs.sorted().forEach { key ->
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text("\u2713", color = Ink.White)
-                                Spacer(Modifier.width(10.dp))
-                                Text(key, style = MaterialTheme.typography.bodySmall, color = Ink.Mid)
+                    Spacer(Modifier.height(12.dp))
+                    Curriculum.chapters.chunked(4).forEach { rowChapters ->
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            rowChapters.forEach { chapter ->
+                                val earned =
+                                    progress.chapterDone(chapter.id) == chapter.briefs.size
+                                Box(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .border(
+                                            1.dp,
+                                            if (earned) Ink.White else Ink.Rule
+                                        )
+                                        .padding(vertical = 12.dp, horizontal = 4.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        Text(
+                                            if (earned) "\u2713" else "\u25A1",
+                                            style = MaterialTheme.typography.titleMedium,
+                                            color = if (earned) Ink.White else Ink.Dim
+                                        )
+                                        Spacer(Modifier.height(4.dp))
+                                        Text(
+                                            chapter.code,
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = if (earned) Ink.White else Ink.Dim,
+                                            maxLines = 1
+                                        )
+                                    }
+                                }
+                            }
+                            repeat(4 - rowChapters.size) {
+                                Spacer(Modifier.weight(1f))
                             }
                         }
+                        Spacer(Modifier.height(10.dp))
                     }
                 }
             }
@@ -400,7 +440,8 @@ fun ProfileScreen(
                         Tag("FINAL EXAM")
                         Spacer(Modifier.height(10.dp))
                         Text(
-                            "All ${Curriculum.totalBriefs} briefs complete. One step remains: " +
+                            "All ${Curriculum.totalBriefs} briefs complete and " +
+                                "${progress.scenariosDone.size} drills done. One step remains: " +
                                 "the final exam — 100 questions, 30 minutes, pass mark 70. " +
                                 "It uses its own questionnaire, jumbled on every take.",
                             style = MaterialTheme.typography.bodyMedium,
@@ -413,6 +454,20 @@ fun ProfileScreen(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = onTakeFinalExam
                         )
+                    } else if (progress.certificateRemaining == 0) {
+                        // v2.0.1: briefs done, drills short of the 35% gate.
+                        Tag("LOCKED")
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            "All briefs complete. The final exam unlocks once you " +
+                                "have also completed at least 35% of the drills — " +
+                                "${progress.examDrillsRemaining} more to go " +
+                                "(${progress.scenariosDone.size}/${progress.drillsRequiredForExam}).",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Ink.Mid
+                        )
+                        Spacer(Modifier.height(12.dp))
+                        AsciiBar(progress.scenarioFraction, slots = 24)
                     } else {
                         Tag("LOCKED")
                         Spacer(Modifier.height(10.dp))

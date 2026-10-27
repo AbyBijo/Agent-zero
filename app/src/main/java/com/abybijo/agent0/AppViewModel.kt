@@ -93,10 +93,22 @@ data class Progress(
             Curriculum.orderedKeys, completedBriefs, finalExamPassed
         )
 
-    /** All briefs done, exam still to pass — the final-exam gate state. */
+    /**
+     * v2.0.1 exam gate (user decision 2026-10-27): the final exam opens
+     * only after ALL briefs are complete AND at least 35% of the drills
+     * are done. 35% of 338 drills, rounded up, is 119 drills.
+     */
+    val drillsRequiredForExam: Int
+        get() = (Scenarios.all.size * 35 + 99) / 100
+
+    val examDrillsRemaining: Int
+        get() = (drillsRequiredForExam - scenariosDone.size).coerceAtLeast(0)
+
+    /** All briefs done, enough drills done, exam still to pass. */
     val isExamReady: Boolean
         get() = Curriculum.orderedKeys.isNotEmpty() &&
-            Curriculum.orderedKeys.all { it in completedBriefs } && !finalExamPassed
+            Curriculum.orderedKeys.all { it in completedBriefs } &&
+            scenariosDone.size >= drillsRequiredForExam && !finalExamPassed
 
     val certificateRemaining: Int
         get() = Progression.remainingForCertificate(Curriculum.orderedKeys, completedBriefs).size

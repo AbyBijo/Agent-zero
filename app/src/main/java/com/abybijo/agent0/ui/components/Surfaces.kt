@@ -225,7 +225,12 @@ fun GhostButton(
     }
 }
 
-/** Key/value stat row used across dashboards. */
+/**
+ * Key/value stat row used across dashboards.
+ * v2.0.1 fix: the label flexes and wraps, but the value is a single
+ * non-wrapping token pinned to the right — long chapter titles used to
+ * squeeze "0/10" until it broke across three lines.
+ */
 @Composable
 fun StatRow(label: String, value: String, modifier: Modifier = Modifier) {
     Row(
@@ -233,8 +238,21 @@ fun StatRow(label: String, value: String, modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(label.uppercase(), style = MaterialTheme.typography.labelSmall, color = Ink.Dim)
-        Text(value, style = MaterialTheme.typography.titleMedium, color = Ink.White)
+        Text(
+            label.uppercase(),
+            style = MaterialTheme.typography.labelSmall,
+            color = Ink.Dim,
+            modifier = Modifier
+                .weight(1f, fill = false)
+                .padding(end = 12.dp)
+        )
+        Text(
+            value,
+            style = MaterialTheme.typography.titleMedium,
+            color = Ink.White,
+            maxLines = 1,
+            softWrap = false
+        )
     }
 }
 

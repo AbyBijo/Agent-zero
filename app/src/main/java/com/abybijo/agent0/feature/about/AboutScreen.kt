@@ -40,7 +40,7 @@ object Credits {
     const val AUTHOR = "Aby Bijo"
     const val GITHUB = "https://github.com/AbyBijo"
     const val EMAIL_PRIMARY = "Abybijo1978@gmail.com"
-    const val WEBSITE = "https://abybijo.com"
+    const val WEBSITE = "https://abybijo.web.app"
     const val BUY_ME_A_COFFEE = "https://www.buymeacoffee.com/AbyBijo"
     const val VERSION = "1.0.1"
 }

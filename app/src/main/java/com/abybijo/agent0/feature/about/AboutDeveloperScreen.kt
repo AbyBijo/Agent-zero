@@ -88,7 +88,7 @@ fun AboutDeveloperScreen(onBack: () -> Unit) {
                     )
                     Spacer(Modifier.height(10.dp))
                     GhostButton(
-                        text = "Website \u2014 abybijo.com",
+                        text = "Website \u2014 abybijo.web.app",
                         modifier = Modifier.fillMaxWidth(),
                         onClick = { openUrl(Credits.WEBSITE) }
                     )
