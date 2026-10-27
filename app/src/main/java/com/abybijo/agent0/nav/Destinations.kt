@@ -19,6 +19,11 @@ object Route {
     const val BRIEF = "brief/{chapterId}/{briefId}"
     fun brief(chapterId: String, briefId: String) = "brief/$chapterId/$briefId"
 
+    // v2.0 Phase 5 — Brief Completion Hub, opened from a brief's Next
+    // action once the brief is marked complete.
+    const val HUB = "hub/{chapterId}/{briefId}"
+    fun hub(chapterId: String, briefId: String) = "hub/$chapterId/$briefId"
+
     const val QUIZ = "quiz"
     const val SCENARIO_LIST = "scenarios"
     const val SCENARIO = "scenario/{scenarioId}"

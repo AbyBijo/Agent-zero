@@ -35,6 +35,7 @@ import com.abybijo.agent0.feature.about.SettingsScreen
 import com.abybijo.agent0.feature.profile.ProfileScreen
 import com.abybijo.agent0.feature.profile.TourOverlay
 import com.abybijo.agent0.feature.profile.TourSteps
+import com.abybijo.agent0.feature.chapters.BriefHubScreen
 import com.abybijo.agent0.feature.chapters.BriefScreen
 import com.abybijo.agent0.feature.chapters.ChapterDetailScreen
 import com.abybijo.agent0.feature.chapters.ChaptersScreen
@@ -270,8 +271,29 @@ private fun Agent0NavHost(
                 onOpenBrief = { c, b ->
                     nav.navigate(Route.brief(c, b)) { popUpTo(Route.BRIEF) { inclusive = true } }
                 },
+                onOpenHub = { c, b -> nav.navigate(Route.hub(c, b)) },
                 onSaveNote = { k, t -> viewModel.setNote(k, t) },
                 onDeleteNote = { viewModel.deleteNote(it) }
+            )
+        }
+
+        composable(
+            Route.HUB,
+            arguments = listOf(
+                navArgument("chapterId") { type = NavType.StringType },
+                navArgument("briefId") { type = NavType.StringType }
+            )
+        ) { entry ->
+            BriefHubScreen(
+                chapterId = entry.arguments?.getString("chapterId").orEmpty(),
+                briefId = entry.arguments?.getString("briefId").orEmpty(),
+                progress = progress,
+                onBack = { nav.popBackStack() },
+                onOpenBrief = { c, b -> nav.navigate(Route.brief(c, b)) },
+                onOpenScenario = { nav.navigate(Route.scenario(it)) },
+                onOpenCase = { nav.navigate(Route.caseDetail(it)) },
+                onOpenResources = { nav.navigate(Route.RESOURCES) },
+                onOpenProfile = { nav.navigate(Route.PROFILE) }
             )
         }
 

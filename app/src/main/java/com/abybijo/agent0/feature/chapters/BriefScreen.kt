@@ -62,6 +62,7 @@ fun BriefScreen(
     onToggleComplete: (String) -> Unit,
     onBookmark: (String) -> Unit,
     onOpenBrief: (String, String) -> Unit,
+    onOpenHub: (String, String) -> Unit = { _, _ -> },
     onSaveNote: (String, String) -> Unit = { _, _ -> },
     onDeleteNote: (String) -> Unit = {}
 ) {
@@ -382,17 +383,19 @@ fun BriefScreen(
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     GhostButton(text = "Back", leading = "\u2190", onClick = onBack)
-                    if (next != null) {
-                        PrimaryButton(
-                            text = "Next brief",
-                            leading = "\u2192",
-                            modifier = Modifier.weight(1f),
-                            onClick = {
-                                if (!complete) onToggleComplete(key)
-                                onOpenBrief(next.first.id, next.second.id)
-                            }
-                        )
-                    }
+                    // v2.0 Phase 5 (SRS §6.4): after the last page, Next
+                    // opens the Brief Completion Hub, which carries the
+                    // clear Next Brief action. Marking complete first if
+                    // needed keeps the hub's unlock rule intact.
+                    PrimaryButton(
+                        text = "Brief hub",
+                        leading = "\u2192",
+                        modifier = Modifier.weight(1f),
+                        onClick = {
+                            if (!complete) onToggleComplete(key)
+                            onOpenHub(chapterId, briefId)
+                        }
+                    )
                 }
             }
             if (next != null) {
