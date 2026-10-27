@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -44,6 +45,10 @@ class Agent0Store(private val context: Context) {
         val TOUR_COMPLETED = booleanPreferencesKey("tour_completed")
         val PROFILE_PROMPT_DISMISSED = booleanPreferencesKey("profile_prompt_dismissed")
         val LAST_POSITION = stringPreferencesKey("last_position")
+        // v2.0 final exam (Phase 5d, user decision 2026-10-27): pass
+        // flag + pass date (epoch millis, 0 = never). Local only.
+        val FINAL_EXAM_PASSED = booleanPreferencesKey("final_exam_passed")
+        val FINAL_EXAM_DATE = longPreferencesKey("final_exam_date")
         // v2.0 personal notes (SRS §7.4): one line per brief, stored as
         // "chapterId/briefId<TAB>escaped-note". Notes are local only and
         // are never included in any certificate or share payload.
@@ -114,6 +119,9 @@ class Agent0Store(private val context: Context) {
     val profilePromptDismissed: Flow<Boolean> =
         prefs.map { it[Keys.PROFILE_PROMPT_DISMISSED] ?: false }
     val lastPosition: Flow<String> = prefs.map { it[Keys.LAST_POSITION] ?: "" }
+
+    val finalExamPassed: Flow<Boolean> = prefs.map { it[Keys.FINAL_EXAM_PASSED] ?: false }
+    val finalExamDate: Flow<Long> = prefs.map { it[Keys.FINAL_EXAM_DATE] ?: 0L }
 
     val notes: Flow<Map<String, String>> = prefs.map { p ->
         parseNotes(p[Keys.NOTES] ?: "")
@@ -189,6 +197,11 @@ class Agent0Store(private val context: Context) {
         context.dataStore.edit { it[Keys.LAST_POSITION] = value.trim() }
 
     /** Save a note for one brief; a blank note deletes it. */
+    suspend fun setFinalExamPassed(dateMillis: Long) = context.dataStore.edit { p ->
+        p[Keys.FINAL_EXAM_PASSED] = true
+        p[Keys.FINAL_EXAM_DATE] = dateMillis
+    }
+
     suspend fun setNote(key: String, text: String) = context.dataStore.edit { p ->
         val cur = parseNotes(p[Keys.NOTES] ?: "").toMutableMap()
         if (text.isBlank()) cur.remove(key) else cur[key] = text

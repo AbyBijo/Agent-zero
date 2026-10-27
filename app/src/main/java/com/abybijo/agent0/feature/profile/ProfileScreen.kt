@@ -30,6 +30,7 @@ import com.abybijo.agent0.ui.components.AsciiBar
 import com.abybijo.agent0.ui.components.Eyebrow
 import com.abybijo.agent0.ui.components.GhostButton
 import com.abybijo.agent0.ui.components.Panel
+import com.abybijo.agent0.ui.components.PrimaryButton
 import com.abybijo.agent0.ui.components.RevealIn
 import com.abybijo.agent0.ui.components.StatRow
 import com.abybijo.agent0.ui.components.Tag
@@ -53,7 +54,8 @@ object Avatars {
  * v2.0 Profile page (SRS §8). Replaces About as a top-level page.
  * Shows name, age (display-only, never gates content), progress,
  * bookmarks, per-brief badges, and the certificate section at the end.
- * Certificate download (PNG/PDF/share) arrives in Phase 5.
+ * Certificate gate (Phase 5d, user decision 2026-10-27): all briefs
+ * complete AND the final exam passed. PNG/PDF/share arrive in 5e.
  */
 @Composable
 fun ProfileScreen(
@@ -65,7 +67,8 @@ fun ProfileScreen(
     onUserAge: (Int?) -> Unit,
     onAvatarId: (String) -> Unit,
     onDeleteNote: (String) -> Unit = {},
-    onStartTour: () -> Unit = {}
+    onStartTour: () -> Unit = {},
+    onTakeFinalExam: () -> Unit = {}
 ) {
     var nameDraft by remember { mutableStateOf(progress.userName) }
     var ageDraft by remember { mutableStateOf(progress.userAge?.toString() ?: "") }
@@ -380,10 +383,27 @@ fun ProfileScreen(
                     Spacer(Modifier.height(10.dp))
                     if (progress.isCertificateUnlocked) {
                         Text(
-                            "Unlocked. Certificate download as image and PDF, " +
-                                "and sharing, arrive in Phase 5.",
+                            "Unlocked. Certificate view, download as image and PDF, " +
+                                "and sharing arrive in the next build.",
                             style = MaterialTheme.typography.bodyMedium,
                             color = Ink.White
+                        )
+                    } else if (progress.isExamReady) {
+                        Tag("FINAL EXAM")
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            "All ${Curriculum.totalBriefs} briefs complete. One step remains: " +
+                                "the final exam — 100 questions, 30 minutes, pass mark 70. " +
+                                "It uses its own questionnaire, jumbled on every take.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Ink.Mid
+                        )
+                        Spacer(Modifier.height(14.dp))
+                        PrimaryButton(
+                            text = "Take the final exam",
+                            leading = "\u2192",
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = onTakeFinalExam
                         )
                     } else {
                         Tag("LOCKED")

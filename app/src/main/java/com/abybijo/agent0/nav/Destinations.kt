@@ -24,6 +24,10 @@ object Route {
     const val HUB = "hub/{chapterId}/{briefId}"
     fun hub(chapterId: String, briefId: String) = "hub/$chapterId/$briefId"
 
+    // v2.0 Phase 5d — Final Exam. Gated by the caller: only offered
+    // from Profile once all briefs are complete.
+    const val FINAL_EXAM = "final-exam"
+
     const val QUIZ = "quiz"
     const val SCENARIO_LIST = "scenarios"
     const val SCENARIO = "scenario/{scenarioId}"

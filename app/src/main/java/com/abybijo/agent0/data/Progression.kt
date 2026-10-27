@@ -63,9 +63,17 @@ object Progression {
         return prefix
     }
 
-    /** True only when every brief in [orderedKeys] is completed. */
-    fun isCertificateUnlocked(orderedKeys: List<String>, completed: Set<String>): Boolean {
-        return orderedKeys.isNotEmpty() && orderedKeys.all { it in completed }
+    /**
+     * True only when every brief in [orderedKeys] is completed AND the
+     * final exam is passed (Phase 5d, user decision 2026-10-27 — the
+     * original briefs-only gate was amended by the user).
+     */
+    fun isCertificateUnlocked(
+        orderedKeys: List<String>,
+        completed: Set<String>,
+        examPassed: Boolean
+    ): Boolean {
+        return orderedKeys.isNotEmpty() && orderedKeys.all { it in completed } && examPassed
     }
 
     /** Remaining briefs for the certificate lock message, in order. */

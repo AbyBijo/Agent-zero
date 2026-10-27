@@ -37,6 +37,7 @@ import com.abybijo.agent0.feature.profile.TourOverlay
 import com.abybijo.agent0.feature.profile.TourSteps
 import com.abybijo.agent0.feature.chapters.BriefHubScreen
 import com.abybijo.agent0.feature.chapters.BriefScreen
+import com.abybijo.agent0.feature.drills.FinalExamScreen
 import com.abybijo.agent0.feature.chapters.ChapterDetailScreen
 import com.abybijo.agent0.feature.chapters.ChaptersScreen
 import com.abybijo.agent0.feature.drills.ChecklistScreen
@@ -235,7 +236,16 @@ private fun Agent0NavHost(
                 onUserAge = { viewModel.setUserAge(it) },
                 onAvatarId = { viewModel.setAvatarId(it) },
                 onDeleteNote = { viewModel.deleteNote(it) },
-                onStartTour = onStartTour
+                onStartTour = onStartTour,
+                onTakeFinalExam = { nav.navigate(Route.FINAL_EXAM) }
+            )
+        }
+
+        composable(Route.FINAL_EXAM) {
+            FinalExamScreen(
+                onBack = { nav.popBackStack() },
+                onExamPassed = { viewModel.setFinalExamPassed(it) },
+                onOpenProfile = { nav.navigate(Route.PROFILE) }
             )
         }
         composable(Route.ABOUT_DEVELOPER) {

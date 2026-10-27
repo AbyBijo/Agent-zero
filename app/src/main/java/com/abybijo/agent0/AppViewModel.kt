@@ -38,7 +38,10 @@ data class Progress(
     val lastPosition: String = "",
     // v2.0 personal notes (SRS §7.4). Local only; never part of the
     // certificate or any share payload.
-    val notes: Map<String, String> = emptyMap()
+    val notes: Map<String, String> = emptyMap(),
+    // v2.0 Phase 5d final exam (user decision 2026-10-27).
+    val finalExamPassed: Boolean = false,
+    val finalExamDate: Long = 0L
 ) {
     val briefFraction: Float
         get() = if (Curriculum.totalBriefs == 0) 0f
@@ -85,7 +88,14 @@ data class Progress(
         Progression.prerequisiteKey(Curriculum.orderedKeys, "$chapterId/$briefId")
 
     val isCertificateUnlocked: Boolean
-        get() = Progression.isCertificateUnlocked(Curriculum.orderedKeys, completedBriefs)
+        get() = Progression.isCertificateUnlocked(
+            Curriculum.orderedKeys, completedBriefs, finalExamPassed
+        )
+
+    /** All briefs done, exam still to pass — the final-exam gate state. */
+    val isExamReady: Boolean
+        get() = Curriculum.orderedKeys.isNotEmpty() &&
+            Curriculum.orderedKeys.all { it in completedBriefs } && !finalExamPassed
 
     val certificateRemaining: Int
         get() = Progression.remainingForCertificate(Curriculum.orderedKeys, completedBriefs).size
@@ -99,9 +109,9 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     private val store = Agent0Store(app.applicationContext)
 
     /**
-     * DataStore exposes each key as its own Flow. `combine` caps out at five
-     * sources, so we fold them in three strongly-typed groups rather than
-     * casting through a List<Any> — no unchecked casts anywhere.
+     * DataStore exposes each key as its own Flow. We fold them in
+     * strongly-typed groups rather than casting through a List<Any> —
+     * no unchecked casts anywhere.
      */
     private data class Learning(
         val onboarded: Boolean,
@@ -132,6 +142,11 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         val lastPosition: String
     )
 
+    private data class Exam(
+        val passed: Boolean,
+        val date: Long
+    )
+
     private val learning = combine(
         store.onboarded, store.completedBriefs, store.checkedItems, store.bookmarks
     ) { onboarded, briefs, checks, marks -> Learning(onboarded, briefs, checks, marks) }
@@ -151,7 +166,13 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         Profile(age, avatar, tour, dismissed, last)
     }
 
-    val progress: StateFlow<Progress> = combine(learning, scores, prefs, profile, store.notes) { l, s, p, pr, notes ->
+    private val exam = combine(
+        store.finalExamPassed, store.finalExamDate
+    ) { passed, date -> Exam(passed, date) }
+
+    val progress: StateFlow<Progress> = combine(
+        learning, scores, prefs, profile, store.notes, exam
+    ) { l, s, p, pr, notes, ex ->
         Progress(
             onboarded = l.onboarded,
             completedBriefs = l.briefs,
@@ -170,7 +191,9 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
             tourCompleted = pr.tourCompleted,
             profilePromptDismissed = pr.profilePromptDismissed,
             lastPosition = pr.lastPosition,
-            notes = notes
+            notes = notes,
+            finalExamPassed = ex.passed,
+            finalExamDate = ex.date
         )
     }.stateIn(viewModelScope, SharingStarted.Eagerly, Progress())
 
@@ -194,6 +217,8 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     fun toggleBookmark(key: String) = viewModelScope.launch { store.toggleBookmark(key) }
     fun recordQuiz(score: Int) = viewModelScope.launch { store.recordQuiz(score) }
     fun recordDiagnostic(score: Int) = viewModelScope.launch { store.recordDiagnostic(score) }
+    fun setFinalExamPassed(dateMillis: Long) =
+        viewModelScope.launch { store.setFinalExamPassed(dateMillis) }
     fun markScenario(id: String) = viewModelScope.launch { store.markScenarioDone(id) }
     fun setReduceMotion(v: Boolean) = viewModelScope.launch { store.setReduceMotion(v) }
     fun setScanlines(v: Boolean) = viewModelScope.launch { store.setScanlines(v) }
