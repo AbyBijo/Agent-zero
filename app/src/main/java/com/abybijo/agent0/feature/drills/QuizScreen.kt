@@ -38,6 +38,7 @@ import com.abybijo.agent0.Progress
 import com.abybijo.agent0.data.QuizBank
 import com.abybijo.agent0.data.QuizQuestion
 import com.abybijo.agent0.ui.components.Agent0Screen
+import com.abybijo.agent0.ui.components.EmptyState
 import com.abybijo.agent0.ui.components.AsciiBar
 import com.abybijo.agent0.ui.components.Eyebrow
 import com.abybijo.agent0.ui.components.GhostButton
@@ -59,7 +60,10 @@ fun QuizScreen(
     onRecord: (Int) -> Unit
 ) {
     var seed by remember { mutableStateOf(System.currentTimeMillis()) }
-    val questions = remember(seed) { QuizBank.session(QUESTION_COUNT, seed) }
+    // v2.0 Phase 5 (SRS §5.3): only questions from completed briefs.
+    val questions = remember(seed) {
+        QuizBank.sessionFor(progress.completedBriefs, QUESTION_COUNT, seed)
+    }
 
     var index by remember(seed) { mutableIntStateOf(0) }
     var selected by remember(seed) { mutableStateOf<Int?>(null) }
@@ -78,6 +82,18 @@ fun QuizScreen(
             onRetry = { seed = System.currentTimeMillis() },
             onBack = onBack
         )
+        return
+    }
+
+    if (questions.isEmpty()) {
+        Agent0Screen(title = "Assessment", onBack = onBack) {
+            item {
+                EmptyState(
+                    "No questions yet. Complete a brief first — " +
+                        "the assessment only asks about briefs you have finished."
+                )
+            }
+        }
         return
     }
 
