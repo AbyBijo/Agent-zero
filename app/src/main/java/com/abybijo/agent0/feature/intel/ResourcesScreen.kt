@@ -51,7 +51,16 @@ fun ResourcesScreen(onBack: () -> Unit) {
             if (category == null) list else list.filter { it.category == category }
         }
     }
-    val grouped = remember(results) { results.groupBy { it.category } }
+    // v2.0 Phase 5 — Resources organisation: categories and items are
+    // shown in alphabetical order, so the list is stable and scannable
+    // regardless of the order entries were added to the data file.
+    // (Deliberate cross-category repeats — e.g. Signal under both Tools
+    // and Communication — are kept: the same tool serves two purposes.)
+    val grouped = remember(results) {
+        results.groupBy { it.category }.toSortedMap().mapValues { (_, items) ->
+            items.sortedBy { it.name }
+        }
+    }
 
     val open: (String) -> Unit = { url ->
         runCatching {
@@ -76,7 +85,7 @@ fun ResourcesScreen(onBack: () -> Unit) {
                     .horizontalScroll(rememberScrollState())
             ) {
                 CategoryChip("ALL", category == null) { category = null }
-                Resources.categories.forEach { c ->
+                Resources.categories.sorted().forEach { c ->
                     Spacer(Modifier.width(7.dp))
                     CategoryChip(c, category == c) { category = if (category == c) null else c }
                 }
