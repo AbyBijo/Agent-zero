@@ -2,6 +2,7 @@ package com.abybijo.agent0.feature.chapters
 
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -66,6 +67,10 @@ fun BriefScreen(
     onSaveNote: (String, String) -> Unit = { _, _ -> },
     onDeleteNote: (String) -> Unit = {}
 ) {
+    // v2.0.1: system back follows the header back button — to the
+    // chapter page, never back through earlier briefs and hubs.
+    BackHandler { onBack() }
+
     val context = LocalContext.current
     val chapter = Curriculum.chapter(chapterId)
     val brief = Curriculum.brief(chapterId, briefId)

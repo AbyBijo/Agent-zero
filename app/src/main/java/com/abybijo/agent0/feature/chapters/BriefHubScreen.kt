@@ -2,6 +2,7 @@ package com.abybijo.agent0.feature.chapters
 
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -57,8 +58,13 @@ fun BriefHubScreen(
     onOpenScenario: (String) -> Unit,
     onOpenCase: (String) -> Unit,
     onOpenResources: () -> Unit,
-    onOpenProfile: () -> Unit
+    onOpenProfile: () -> Unit,
+    onOpenChapterHub: (String) -> Unit = {}
 ) {
+    // v2.0.1: system back follows the header back button — to the
+    // chapter page, never back through earlier briefs and hubs.
+    BackHandler { onBack() }
+
     val context = LocalContext.current
     val chapter = Curriculum.chapter(chapterId)
     val brief = Curriculum.brief(chapterId, briefId)
@@ -335,7 +341,34 @@ fun BriefHubScreen(
         // ── next ──────────────────────────────────────────────────────
         item {
             RevealIn {
-                if (next != null) {
+                if (next != null && next.first.id != chapterId) {
+                    // v2.0.1: crossing into a new chapter goes through
+                    // the chapter summary hub, which asks about continuing
+                    // to that chapter's first brief.
+                    Panel(background = Ink.Void) {
+                        Eyebrow("Chapter complete")
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            "You have finished ${chapter.code} \u2014 ${chapter.title}. " +
+                                "See the chapter summary before moving on.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Ink.Mid
+                        )
+                    }
+                    Spacer(Modifier.height(16.dp))
+                    PrimaryButton(
+                        text = "Chapter summary",
+                        leading = "\u2192",
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { onOpenChapterHub(chapterId) }
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    Text(
+                        "UP NEXT \u00B7 ${next.first.code} \u2014 ${next.second.title}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Ink.Dim
+                    )
+                } else if (next != null) {
                     PrimaryButton(
                         text = "Next brief",
                         leading = "\u2192",

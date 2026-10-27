@@ -1,5 +1,6 @@
 package com.abybijo.agent0.nav
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -37,6 +38,7 @@ import com.abybijo.agent0.feature.profile.TourOverlay
 import com.abybijo.agent0.feature.profile.TourSteps
 import com.abybijo.agent0.feature.chapters.BriefHubScreen
 import com.abybijo.agent0.feature.chapters.BriefScreen
+import com.abybijo.agent0.feature.chapters.ChapterHubScreen
 import com.abybijo.agent0.feature.certificate.CertificateScreen
 import com.abybijo.agent0.feature.drills.FinalExamScreen
 import com.abybijo.agent0.feature.chapters.ChapterDetailScreen
@@ -63,6 +65,37 @@ import com.abybijo.agent0.ui.theme.Ink
 import com.abybijo.agent0.ui.theme.Motion
 
 private const val SLIDE = 40
+
+/**
+ * v2.0.1 navigation rules — the fix for the back-stack bugs:
+ * - Opening a brief always flattens the stack to [home, brief]. No
+ *   chain of earlier briefs and hubs can accumulate underneath it.
+ * - Going back from a brief or a hub always lands on that brief's
+ *   chapter page, via a fresh chapter destination over a flat stack.
+ * - Tour steps move the same flat way, so finishing or skipping the
+ *   tour leaves exactly [home] behind — system back then exits the
+ *   app instead of replaying the tour in reverse.
+ */
+private fun NavHostController.openBrief(chapterId: String, briefId: String) {
+    navigate(Route.brief(chapterId, briefId)) {
+        popUpTo(Route.HOME) { saveState = true }
+        launchSingleTop = true
+    }
+}
+
+private fun NavHostController.backToChapter(chapterId: String) {
+    navigate(Route.chapterDetail(chapterId)) {
+        popUpTo(Route.HOME) { saveState = true }
+        launchSingleTop = true
+    }
+}
+
+private fun NavHostController.moveTourTo(route: String) {
+    navigate(route) {
+        popUpTo(Route.HOME) { saveState = true }
+        launchSingleTop = true
+    }
+}
 
 @Composable
 fun Agent0App(viewModel: AppViewModel, progress: Progress) {
@@ -106,14 +139,17 @@ private fun MainScaffold(viewModel: AppViewModel, progress: Progress) {
     var tourStep by remember { mutableIntStateOf(if (progress.tourCompleted) -1 else 0) }
     // Explicit Unit: setTourCompleted returns a Job (viewModelScope.launch),
     // and passing a () -> Job where () -> Unit is expected fails compilation.
+    // v2.0.1: closing the tour also flattens the stack to exactly [home],
+    // so back can never walk back through the tour pages.
     val closeTour: () -> Unit = {
         tourStep = -1
         viewModel.setTourCompleted(true)
+        nav.navigate(Route.HOME) { popUpTo(Route.HOME) { inclusive = true } }
         Unit
     }
     val startTour = {
         tourStep = 0
-        nav.navigate(TourSteps.all[0].route) { launchSingleTop = true }
+        nav.moveTourTo(TourSteps.all[0].route)
     }
 
     Box(
@@ -131,15 +167,27 @@ private fun MainScaffold(viewModel: AppViewModel, progress: Progress) {
                     onStartTour = startTour
                 )
                 if (tourStep >= 0) {
+                    // v2.0.1: system back during the tour follows the
+                    // overlay's Back button — previous step, or close
+                    // on the first step — instead of popping the nav
+                    // stack out from under the overlay.
+                    BackHandler {
+                        if (tourStep > 0) {
+                            tourStep--
+                            nav.moveTourTo(TourSteps.all[tourStep].route)
+                        } else {
+                            closeTour()
+                        }
+                    }
                     TourOverlay(
                         stepIndex = tourStep,
                         onBack = {
                             tourStep--
-                            nav.navigate(TourSteps.all[tourStep].route) { launchSingleTop = true }
+                            nav.moveTourTo(TourSteps.all[tourStep].route)
                         },
                         onNext = {
                             tourStep++
-                            nav.navigate(TourSteps.all[tourStep].route) { launchSingleTop = true }
+                            nav.moveTourTo(TourSteps.all[tourStep].route)
                         },
                         onSkip = closeTour,
                         onFinish = closeTour,
@@ -207,7 +255,7 @@ private fun Agent0NavHost(
         composable(Route.HOME) {
             HomeScreen(
                 progress = progress,
-                onOpenBrief = { c, b -> nav.navigate(Route.brief(c, b)) },
+                onOpenBrief = { c, b -> nav.openBrief(c, b) },
                 onNavigate = { nav.navigate(it) }
             )
         }
@@ -231,7 +279,7 @@ private fun Agent0NavHost(
             ProfileScreen(
                 progress = progress,
                 onNavigate = { nav.navigate(it) },
-                onOpenBrief = { c, b -> nav.navigate(Route.brief(c, b)) },
+                onOpenBrief = { c, b -> nav.openBrief(c, b) },
                 onToggleBookmark = { viewModel.toggleBookmark(it) },
                 onUserName = { viewModel.setUserName(it) },
                 onUserAge = { viewModel.setUserAge(it) },
@@ -270,7 +318,22 @@ private fun Agent0NavHost(
                 chapterId = entry.arguments?.getString("chapterId").orEmpty(),
                 progress = progress,
                 onBack = { nav.popBackStack() },
-                onOpenBrief = { c, b -> nav.navigate(Route.brief(c, b)) }
+                onOpenBrief = { c, b -> nav.openBrief(c, b) },
+                onOpenChapterHub = { nav.navigate(Route.chapterHub(it)) }
+            )
+        }
+
+        composable(
+            Route.CHAPTER_HUB,
+            arguments = listOf(navArgument("chapterId") { type = NavType.StringType })
+        ) { entry ->
+            val hubChapterId = entry.arguments?.getString("chapterId").orEmpty()
+            ChapterHubScreen(
+                chapterId = hubChapterId,
+                progress = progress,
+                onBack = { nav.backToChapter(hubChapterId) },
+                onOpenBrief = { c, b -> nav.openBrief(c, b) },
+                onOpenProfile = { nav.navigate(Route.PROFILE) }
             )
         }
 
@@ -281,16 +344,15 @@ private fun Agent0NavHost(
                 navArgument("briefId") { type = NavType.StringType }
             )
         ) { entry ->
+            val briefChapterId = entry.arguments?.getString("chapterId").orEmpty()
             BriefScreen(
-                chapterId = entry.arguments?.getString("chapterId").orEmpty(),
+                chapterId = briefChapterId,
                 briefId = entry.arguments?.getString("briefId").orEmpty(),
                 progress = progress,
-                onBack = { nav.popBackStack() },
+                onBack = { nav.backToChapter(briefChapterId) },
                 onToggleComplete = { viewModel.toggleBrief(it) },
                 onBookmark = { viewModel.toggleBookmark(it) },
-                onOpenBrief = { c, b ->
-                    nav.navigate(Route.brief(c, b)) { popUpTo(Route.BRIEF) { inclusive = true } }
-                },
+                onOpenBrief = { c, b -> nav.openBrief(c, b) },
                 onOpenHub = { c, b -> nav.navigate(Route.hub(c, b)) },
                 onSaveNote = { k, t -> viewModel.setNote(k, t) },
                 onDeleteNote = { viewModel.deleteNote(it) }
@@ -304,16 +366,18 @@ private fun Agent0NavHost(
                 navArgument("briefId") { type = NavType.StringType }
             )
         ) { entry ->
+            val hubChapterId = entry.arguments?.getString("chapterId").orEmpty()
             BriefHubScreen(
-                chapterId = entry.arguments?.getString("chapterId").orEmpty(),
+                chapterId = hubChapterId,
                 briefId = entry.arguments?.getString("briefId").orEmpty(),
                 progress = progress,
-                onBack = { nav.popBackStack() },
-                onOpenBrief = { c, b -> nav.navigate(Route.brief(c, b)) },
+                onBack = { nav.backToChapter(hubChapterId) },
+                onOpenBrief = { c, b -> nav.openBrief(c, b) },
                 onOpenScenario = { nav.navigate(Route.scenario(it)) },
                 onOpenCase = { nav.navigate(Route.caseDetail(it)) },
                 onOpenResources = { nav.navigate(Route.RESOURCES) },
-                onOpenProfile = { nav.navigate(Route.PROFILE) }
+                onOpenProfile = { nav.navigate(Route.PROFILE) },
+                onOpenChapterHub = { nav.navigate(Route.chapterHub(it)) }
             )
         }
 
@@ -384,7 +448,7 @@ private fun Agent0NavHost(
         composable(Route.SEARCH) {
             SearchScreen(
                 onBack = { nav.popBackStack() },
-                onOpenBrief = { c, b -> nav.navigate(Route.brief(c, b)) }
+                onOpenBrief = { c, b -> nav.openBrief(c, b) }
             )
         }
         composable(Route.SETTINGS) {

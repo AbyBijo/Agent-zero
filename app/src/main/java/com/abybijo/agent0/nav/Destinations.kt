@@ -24,6 +24,12 @@ object Route {
     const val HUB = "hub/{chapterId}/{briefId}"
     fun hub(chapterId: String, briefId: String) = "hub/$chapterId/$briefId"
 
+    // v2.0.1 — Chapter Summary Hub, shown when a chapter's last brief
+    // is completed. Carries the chapter summary and the Continue action
+    // to the next chapter's first brief.
+    const val CHAPTER_HUB = "chapter-hub/{chapterId}"
+    fun chapterHub(id: String) = "chapter-hub/$id"
+
     // v2.0 Phase 5d — Final Exam. Gated by the caller: only offered
     // from Profile once all briefs are complete.
     const val FINAL_EXAM = "final-exam"

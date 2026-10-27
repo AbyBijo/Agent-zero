@@ -24,6 +24,7 @@ import com.abybijo.agent0.ui.components.CheckGlyph
 import com.abybijo.agent0.ui.components.EmptyState
 import com.abybijo.agent0.ui.components.Eyebrow
 import com.abybijo.agent0.ui.components.Panel
+import com.abybijo.agent0.ui.components.PrimaryButton
 import com.abybijo.agent0.ui.components.RevealIn
 import com.abybijo.agent0.ui.components.SolidRule
 import com.abybijo.agent0.ui.components.Tag
@@ -35,7 +36,8 @@ fun ChapterDetailScreen(
     chapterId: String,
     progress: Progress,
     onBack: () -> Unit,
-    onOpenBrief: (String, String) -> Unit
+    onOpenBrief: (String, String) -> Unit,
+    onOpenChapterHub: (String) -> Unit = {}
 ) {
     val chapter = Curriculum.chapter(chapterId)
     if (chapter == null) {
@@ -97,6 +99,17 @@ fun ChapterDetailScreen(
                         slots = 22,
                         showPercent = false
                     )
+                    // v2.0.1: a completed chapter offers its summary hub
+                    // from its own page, not only from the brief hub.
+                    if (done == chapter.briefs.size) {
+                        Spacer(Modifier.height(16.dp))
+                        PrimaryButton(
+                            text = "Chapter summary",
+                            leading = "\u2192",
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = { onOpenChapterHub(chapterId) }
+                        )
+                    }
                 }
             }
             Spacer(Modifier.height(22.dp))
