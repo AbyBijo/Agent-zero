@@ -94,19 +94,19 @@ object Cases10 {
             source = "FBI Internet Crime Complaint Center (2022)"
         ),
         CaseStudy(
-            id = "mt-gox-2014",
-            title = "Mt. Gox Collapse (2014)",
-            year = "2014",
-            tags = listOf("Finance", "Crypto", "Exchange"),
-            summary = "Mt. Gox, once the world's largest bitcoin exchange, collapsed in 2014 after hundreds of thousands of bitcoins belonging to customers went missing.",
-            details = "The exchange, which handled most of the world's bitcoin trading, filed for bankruptcy after discovering the loss. Customers who had treated the exchange as a safe place to store bitcoin found their funds were gone, with recovery taking years through bankruptcy proceedings. The exchange was a single point of failure for its customers' assets.",
+            id = "quadrigacx-collapse-2019",
+            title = "QuadrigaCX Collapse (2019)",
+            year = "2019",
+            tags = listOf("Finance", "Crypto", "Custody"),
+            summary = "QuadrigaCX, then Canada's largest crypto exchange, collapsed in 2019 after its founder died, reportedly the only person holding the passwords to cold wallets containing customer funds.",
+            details = "Founder Gerald Cotten died in late 2018, and the exchange said customer funds were inaccessible without him. Investigators later found the exchange had been operating with major shortfalls and customer funds had been moved and spent. The Ontario Securities Commission later described the operation as a fraud. Customers waited years for partial recovery through bankruptcy proceedings.",
             lessons = listOf(
-                "An exchange is not a wallet. Assets left on an exchange are exposed to the exchange's failure.",
-                "Concentration is risk: a single platform holding most of an asset class is a single point of failure.",
-                "Understand custody before depositing: who actually controls the assets, and what happens if the platform fails?"
+                "Custody is the question that matters: who actually controls the assets, and what happens if that person or platform disappears?",
+                "Single-person control of customer funds is a single point of failure, however trustworthy that person seems.",
+                "An exchange is not a wallet. Assets left on an exchange are exposed to the exchange's failure."
             ),
             briefKey = "financial/fin-crypto",
-            source = "Mt. Gox bankruptcy proceedings (2014)"
+            source = "Ontario Securities Commission report (2020)"
         ),
         CaseStudy(
             id = "propublica-secret-irs-files-2021",
@@ -139,19 +139,19 @@ object Cases10 {
             source = "FBI Internet Crime Complaint Center (2023)"
         ),
         CaseStudy(
-            id = "equifax-2017",
-            title = "Equifax Breach (2017)",
-            year = "2017",
-            tags = listOf("Finance", "Routine", "Patching"),
-            summary = "Equifax, one of the largest US credit bureaus, suffered a breach in 2017 exposing the personal data of about 147 million people, after failing to patch a known vulnerability.",
-            details = "Attackers exploited an unpatched vulnerability in a web application framework, then moved through Equifax's systems for months, exfiltrating names, Social Security numbers, birth dates, and addresses. A US House report later found that a single employee's failure to apply a patch, and a failure to renew a security certificate, contributed to the breach.",
+            id = "latitude-financial-breach-2023",
+            title = "Latitude Financial Breach (2023)",
+            year = "2023",
+            tags = listOf("Finance", "Routine", "Credentials"),
+            summary = "Latitude Financial, an Australian consumer finance provider, disclosed a breach in 2023 exposing personal data of millions of customers, after attackers obtained employee login credentials.",
+            details = "Attackers used stolen employee credentials to access Latitude's systems, and the exposure grew as the investigation found more affected records. The company warned customers about identity theft risk and offered monitoring. The case shows that routine credential hygiene, unique passwords, multi-factor authentication, and monitoring for unusual access, is what stands between an attacker and a customer database.",
             lessons = listOf(
-                "Routine maintenance is security: an unpatched known vulnerability is an open door, not a minor oversight.",
+                "Routine credential hygiene is security: unique passwords, multi-factor authentication, and monitoring for unusual access, not only failed logins.",
                 "Data collected about people who never chose to share it is still data that must be defended.",
-                "After a breach of identity data, freeze credit and monitor accounts: identifiers like Social Security numbers cannot be changed easily."
+                "After a breach of identity data, freeze credit and monitor accounts: identifiers cannot be changed easily."
             ),
             briefKey = "financial/fin-routine",
-            source = "US House Oversight Committee report (2018)"
+            source = "Latitude Financial (2023)"
         )
     )
 }

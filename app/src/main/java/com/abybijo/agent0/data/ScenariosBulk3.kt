@@ -420,7 +420,7 @@ object ScenariosBulk3 {
         Scenario(
             id = "bulk-d087", title = "Theory Meets Rain",
             intro = "You planned a secure meeting perfectly — on paper. In reality it rains, the venue changes, and devices get wet and shared.",
-            start = "step1", briefKey = "fieldcraft/fieldcraft",
+            start = "step1", briefKey = "fieldcraft/secure-comms",
             steps = mapOf(
                 "step1" to ScenarioStep(id = "step1", text = "What failed?",
                     choices = listOf(
@@ -443,7 +443,7 @@ object ScenariosBulk3 {
         Scenario(
             id = "bulk-d088", title = "The Checklist You Skipped",
             intro = "You skip a rehearsed checklist because 'you know it by heart'. Under pressure, you miss a step.",
-            start = "step1", briefKey = "fieldcraft/fieldcraft",
+            start = "step1", briefKey = "fieldcraft/sustain",
             steps = mapOf(
                 "step1" to ScenarioStep(id = "step1", text = "What went wrong?",
                     choices = listOf(

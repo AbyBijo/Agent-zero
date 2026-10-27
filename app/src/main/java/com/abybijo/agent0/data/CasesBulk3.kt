@@ -4,14 +4,14 @@ package com.abybijo.agent0.data
 object CasesBulk3 {
     val all: List<CaseStudy> = listOf(
         CaseStudy(
-            id = "jpmorgan-breach-2014",
-            title = "JPMorgan Chase Breach (2014)",
+            id = "sally-beauty-breach-2014",
+            title = "Sally Beauty Breach (2014)",
             year = "2014",
-            tags = listOf("Breach", "Credentials"),
-            summary = "Attackers accessed JPMorgan Chase systems in 2014 and exposed contact information for a very large number of households and small businesses, after exploiting a server lacking two-factor authentication.",
-            details = "The intrusion was discovered after the bank's security team noticed unusual activity. Investigators found the attackers had entered through a server without two-factor protection. The bank later invested heavily in security staffing and controls. The case is a textbook example of a single unprotected entry point.",
-            lessons = listOf("Two-factor authentication must cover every entry point, not only the main ones. One gap is enough.", "Large institutions are attacked through ordinary weaknesses, not exotic ones."),
-            source = "JPMorgan Chase (2014)"
+            tags = listOf("Breach", "Point of Sale"),
+            summary = "Sally Beauty, a US beauty supply retailer, suffered a breach in 2014 after malware was placed on its point-of-sale systems, exposing payment card data of customers.",
+            details = "Attackers installed malware on store registers that captured card data as it was swiped. The breach was discovered after card issuers noticed fraud patterns linked to Sally Beauty stores. The case shows that retail breaches are often discovered by banks, not by the retailer, and that point-of-sale malware is a routine, repeatable attack, not an exotic one.",
+            lessons = listOf("Point-of-sale malware is a routine attack. Segment payment systems and monitor them separately.", "A breach discovered by your bank is a breach discovered late. Watch for fraud patterns yourself."),
+            source = "Sally Beauty (2014)"
         ),
         CaseStudy(
             id = "singhealth-breach-2018",
@@ -264,14 +264,14 @@ object CasesBulk3 {
             source = "Snowflake (2024)"
         ),
         CaseStudy(
-            id = "national-public-data-breach-2024",
-            title = "National Public Data Breach (2024)",
+            id = "patelco-ransomware-2024",
+            title = "Patelco Credit Union Ransomware Attack (2024)",
             year = "2024",
-            tags = listOf("Breach", "Data Broker"),
-            summary = "National Public Data, a background-check data broker, suffered a breach in 2024 exposing Social Security numbers and personal details of a very large number of Americans.",
-            details = "The data appeared for sale in 2024 and the company later confirmed the breach in a filing. The case shows that data brokers hold sensitive data on people who never chose them as a provider, and that breach harm is magnified for Social Security numbers.",
-            lessons = listOf("Data brokers hold your data without your choice. Freeze credit and monitor identity.", "Social Security numbers in breaches enable long-term identity theft. Protect them accordingly."),
-            source = "National Public Data (2024)"
+            tags = listOf("Breach", "Ransomware"),
+            summary = "Patelco Credit Union, a California credit union, suffered a ransomware attack in 2024 that took its banking systems offline for weeks and exposed member data.",
+            details = "The attack forced Patelco to shut down systems, leaving members unable to access online banking, with branches operating on manual processes. The credit union later confirmed member data was accessed. Recovery took weeks, showing that ransomware harm is measured in downtime and trust, not only in stolen data.",
+            lessons = listOf("Ransomware downtime is itself the damage. Keep offline backups and manual fallbacks.", "Members need clear communication during an outage. Silence breeds rumour and panic."),
+            source = "Patelco Credit Union (2024)"
         ),
         CaseStudy(
             id = "att-breach-2024",
