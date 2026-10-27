@@ -9,6 +9,7 @@ import com.abybijo.agent0.data.Curriculum
 import com.abybijo.agent0.data.Diagnostic
 import com.abybijo.agent0.data.Progression
 import com.abybijo.agent0.data.Scenarios
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -170,9 +171,13 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
         store.finalExamPassed, store.finalExamDate
     ) { passed, date -> Exam(passed, date) }
 
-    val progress: StateFlow<Progress> = combine(
-        learning, scores, prefs, profile, store.notes, exam
-    ) { l, s, p, pr, notes, ex ->
+    // NOTE: kotlinx combine's typed overloads cap out at five sources
+    // (the original comment was right) — so the exam group is folded
+    // in with a second, two-source combine via copy(), not a sixth
+    // source on the main combine.
+    private val baseProgress: Flow<Progress> = combine(
+        learning, scores, prefs, profile, store.notes
+    ) { l, s, p, pr, notes ->
         Progress(
             onboarded = l.onboarded,
             completedBriefs = l.briefs,
@@ -191,10 +196,12 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
             tourCompleted = pr.tourCompleted,
             profilePromptDismissed = pr.profilePromptDismissed,
             lastPosition = pr.lastPosition,
-            notes = notes,
-            finalExamPassed = ex.passed,
-            finalExamDate = ex.date
+            notes = notes
         )
+    }
+
+    val progress: StateFlow<Progress> = combine(baseProgress, exam) { base, ex ->
+        base.copy(finalExamPassed = ex.passed, finalExamDate = ex.date)
     }.stateIn(viewModelScope, SharingStarted.Eagerly, Progress())
 
     fun completeOnboarding(name: String = "") = viewModelScope.launch {
