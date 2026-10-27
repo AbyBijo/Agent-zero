@@ -276,7 +276,7 @@ object QuizBank {
             answerIndex = 1,
             rationale = "Without a maintenance rhythm, permissions widen and untested backups fail silently."
         ),
-    ) + QuizBank09.all + QuizBank10.all + QuizBank11.all + QuizBank12.all + QuizBank13.all + QuizBank14.all + QuizBank15.all
+    ) + QuizBank09.all + QuizBank10.all + QuizBank11.all + QuizBank12.all + QuizBank13.all + QuizBank14.all + QuizBank15.all + QuizBankBulk1.all
 
     /** Deterministic-per-session shuffle of [count] questions. */
     fun session(count: Int = 10, seed: Long = System.currentTimeMillis()): List<QuizQuestion> =
