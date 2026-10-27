@@ -33,7 +33,23 @@
             </intent-filter>
         </activity>
 
-        <!-- No analytics, no ads, no content providers, no exported services. -->
+        <!--
+            No analytics, no ads, no exported services. One non-exported
+            FileProvider (v2.0 Phase 5e) exists solely so the user can
+            share their own certificate PNG/PDF from the app cache via
+            the system chooser. It grants no permission and exposes no
+            other file. The manifest's no-permissions guarantee is
+            unchanged: this provider needs no permission.
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/certificate_paths" />
+        </provider>
     </application>
 
     <queries>

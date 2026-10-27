@@ -28,6 +28,10 @@ object Route {
     // from Profile once all briefs are complete.
     const val FINAL_EXAM = "final-exam"
 
+    // v2.0 Phase 5e — Certificate view + PNG/PDF download and share.
+    // Only reachable once the certificate is unlocked.
+    const val CERTIFICATE = "certificate"
+
     const val QUIZ = "quiz"
     const val SCENARIO_LIST = "scenarios"
     const val SCENARIO = "scenario/{scenarioId}"

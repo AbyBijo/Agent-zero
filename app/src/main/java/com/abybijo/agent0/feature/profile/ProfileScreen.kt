@@ -68,7 +68,8 @@ fun ProfileScreen(
     onAvatarId: (String) -> Unit,
     onDeleteNote: (String) -> Unit = {},
     onStartTour: () -> Unit = {},
-    onTakeFinalExam: () -> Unit = {}
+    onTakeFinalExam: () -> Unit = {},
+    onOpenCertificate: () -> Unit = {}
 ) {
     var nameDraft by remember { mutableStateOf(progress.userName) }
     var ageDraft by remember { mutableStateOf(progress.userAge?.toString() ?: "") }
@@ -383,10 +384,17 @@ fun ProfileScreen(
                     Spacer(Modifier.height(10.dp))
                     if (progress.isCertificateUnlocked) {
                         Text(
-                            "Unlocked. Certificate view, download as image and PDF, " +
-                                "and sharing arrive in the next build.",
+                            "Unlocked. View your certificate, download it as " +
+                                "image or PDF, or share it.",
                             style = MaterialTheme.typography.bodyMedium,
                             color = Ink.White
+                        )
+                        Spacer(Modifier.height(14.dp))
+                        PrimaryButton(
+                            text = "View certificate",
+                            leading = "\u2192",
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = onOpenCertificate
                         )
                     } else if (progress.isExamReady) {
                         Tag("FINAL EXAM")

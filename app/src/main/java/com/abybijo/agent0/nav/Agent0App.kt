@@ -37,6 +37,7 @@ import com.abybijo.agent0.feature.profile.TourOverlay
 import com.abybijo.agent0.feature.profile.TourSteps
 import com.abybijo.agent0.feature.chapters.BriefHubScreen
 import com.abybijo.agent0.feature.chapters.BriefScreen
+import com.abybijo.agent0.feature.certificate.CertificateScreen
 import com.abybijo.agent0.feature.drills.FinalExamScreen
 import com.abybijo.agent0.feature.chapters.ChapterDetailScreen
 import com.abybijo.agent0.feature.chapters.ChaptersScreen
@@ -237,7 +238,16 @@ private fun Agent0NavHost(
                 onAvatarId = { viewModel.setAvatarId(it) },
                 onDeleteNote = { viewModel.deleteNote(it) },
                 onStartTour = onStartTour,
-                onTakeFinalExam = { nav.navigate(Route.FINAL_EXAM) }
+                onTakeFinalExam = { nav.navigate(Route.FINAL_EXAM) },
+                onOpenCertificate = { nav.navigate(Route.CERTIFICATE) }
+            )
+        }
+
+        composable(Route.CERTIFICATE) {
+            CertificateScreen(
+                userName = progress.userName,
+                finalExamDate = progress.finalExamDate,
+                onBack = { nav.popBackStack() }
             )
         }
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    FileProvider paths for certificate sharing (v2.0 Phase 5e).
+    Only the app's own cache/certificates directory is exposed, and
+    only to the app the user picks in the share chooser, per file.
+    No other directory is shared.
+-->
+<paths>
+    <cache-path name="certificates" path="certificates/" />
+</paths>
