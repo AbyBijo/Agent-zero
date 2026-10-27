@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: 'Release tag (e.g. v2.0.0)'
+        description: 'Release tag (e.g. v2.0.1)'
         required: true
-        default: 'v2.0.0'
+        default: 'v2.0.1'
 permissions:
   contents: write
 jobs:
@@ -56,5 +56,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${{ inputs.release_tag }}" app/build/outputs/apk/release/app-release.apk --title "Agent-0 ${{ inputs.release_tag }}" --notes "Agent-0 v2.0.0 — offline OPSEC training. Release APK (package com.abybijo.agent0), signed with the release key (SHA256 0E:EF:C0:4E:FD:C0:2E:60:37:CD:5F:BF:5C:A1:E6:4D:3C:1A:36:65:6E:45:F5:02:A4:61:71:8F:ED:90:D5:D4). 16 chapters, 120 briefs, 338 scenario drills, 548 practice questions plus a 100-question timed final exam (pass 70/100), 409 case files, sequential locking, Profile with bookmarks and notes, Brief Completion Hub, and a certificate of completion (PNG/PDF) unlocked by finishing all briefs and passing the final exam. Zero permissions, no accounts, no network, local-only storage."
+          gh release create "${{ inputs.release_tag }}" app/build/outputs/apk/release/app-release.apk --title "Agent-0 ${{ inputs.release_tag }}" --notes "Resolved minor bugs and known issues."
           gh release create "${{ inputs.release_tag }}-debug" app/build/outputs/apk/debug/app-debug.apk --prerelease --title "Agent-0 ${{ inputs.release_tag }}-debug (developer build)" --notes "Developer build of Agent-0 ${{ inputs.release_tag }} (package com.abybijo.agent0.debug), signed with the debug key. For developers and testers; end users should install the main ${{ inputs.release_tag }} release instead."
