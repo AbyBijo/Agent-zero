@@ -56,7 +56,7 @@ fun ChapterHubScreen(
     val done = progress.chapterDone(chapterId)
     val total = chapter.briefs.size
     val complete = done == total
-    val chapterDrills = Scenarios.all.filter { it.briefKey.substringBefore("/") == chapterId }
+    val chapterDrills = Scenarios.all.filter { it.briefKey?.substringBefore("/") == chapterId }
     val drillsDone = chapterDrills.count { it.id in progress.scenariosDone }
     val chapterIndex = Curriculum.chapters.indexOf(chapter)
     val nextChapter = Curriculum.chapters.getOrNull(chapterIndex + 1)
