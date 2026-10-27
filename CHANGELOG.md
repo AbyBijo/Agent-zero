@@ -1,5 +1,32 @@
 # Agent-0 Changelog
 
+## v2.0.1 (2026-10-27)
+
+Resolved minor bugs and known issues.
+
+- **Back navigation fixed** — the app never handled the Android system back
+  button, so back walked through every brief and hub visited, and replayed
+  the guided tour in reverse. Opening a brief now flattens the stack, and
+  back from a brief or hub — header arrow and system back alike — always
+  lands on that brief's chapter page. Tour steps move the same flat way,
+  and finishing or skipping the tour leaves exactly home behind.
+- **Profile alignment fixed** — long chapter titles no longer squeeze the
+  chapter counts until they break across lines. The count is now a single
+  non-wrapping token pinned to the right.
+- **Chapter summary hub** — finishing a chapter's last brief now opens a
+  chapter summary page (tagline, briefs, drills, minutes, every brief
+  ticked) that asks whether to continue to the next chapter's first
+  brief. The same summary is reachable from a completed chapter's page.
+  The per-brief hub on every brief is unchanged.
+- **Badges are chapter-only** — a grid of the 16 chapter badges, each
+  unlocking only when its whole chapter is complete.
+- **Final exam gate** — the exam now opens only after all briefs are
+  complete and at least 35% of the drills are done (119 of 338). Profile
+  shows exactly how many drills are left when briefs are done but drills
+  are short.
+- **Creator website** — About and About Developer now point to
+  abybijo.web.app.
+
 ## v2.0.0 (2026-10-27)
 
 Full curriculum expansion, built on the v1.0.1 baseline (9 chapters, 49 briefs).

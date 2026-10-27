@@ -42,7 +42,7 @@ object Credits {
     const val EMAIL_PRIMARY = "Abybijo1978@gmail.com"
     const val WEBSITE = "https://abybijo.web.app"
     const val BUY_ME_A_COFFEE = "https://www.buymeacoffee.com/AbyBijo"
-    const val VERSION = "1.0.1"
+    const val VERSION = "2.0.1"
 }
 
 @Composable

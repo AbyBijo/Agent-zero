@@ -1,6 +1,6 @@
 # AGENT-0
 
-[![Version: 2.0.0](https://img.shields.io/badge/Version-2.0.0-black.svg)](CHANGELOG.md)
+[![Version: 2.0.1](https://img.shields.io/badge/Version-2.0.1-black.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform: Android](https://img.shields.io/badge/Platform-Android-3DDC84.svg)](https://developer.android.com)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.2.21-7F52FF.svg)](https://kotlinlang.org)
@@ -69,6 +69,17 @@ is still here, in the same order; 2.0 adds the second half and the finish line.
 
 See [CHANGELOG.md](CHANGELOG.md) for the full list.
 
+### 2.0.1 — resolved minor bugs and known issues
+
+- Back navigation fixed: back from a brief or hub now lands on its chapter
+  page, and the tour no longer replays in reverse on back presses.
+- Profile chapter counts no longer break across lines on long titles.
+- New chapter summary hub at every chapter boundary, asking whether to
+  continue to the next chapter's first brief.
+- Badges are chapter-only, in a grid, unlocking on chapter completion.
+- Final exam gate: all briefs plus at least 35% of drills.
+- Creator website is now abybijo.web.app.
+
 ---
 
 ## Why Agent-0
@@ -114,7 +125,7 @@ cover one corner of the problem. Agent-0 brings the discipline together:
 
 | | |
 |---|---|
-| **Version** | 2.0.0 (`versionCode` 3) |
+| **Version** | 2.0.1 (`versionCode` 4) |
 | **Platform** | Android 7.0+ (`minSdk` 24) |
 | **Language / UI** | Kotlin 2.2.21 · Jetpack Compose (BOM 2025.10.01) · Material 3 |
 | **Build** | Android Gradle Plugin 8.11.1 · Gradle 8.13 · JDK 17 |
@@ -133,7 +144,7 @@ cover one corner of the problem. Agent-0 brings the discipline together:
 | Briefs (lessons) | 120, ~483 minutes of new-chapter content on top of the 1.0.1 base |
 | Scenario drills | 338 branching drills, every path verified reachable |
 | Quiz bank | 548 practice questions, each with a rationale |
-| Final exam | 100 dedicated questions, 30 minutes, pass 70/100, jumbled every take |
+| Final exam | 100 dedicated questions, 30 minutes, pass 70/100, jumbled every take, unlocks after all briefs + 35% of drills |
 | Certificate | PNG/PDF download and share, unlocked by all briefs + exam pass |
 | Checklist items | 85, across 9 operational routines |
 | Case files | 409 documented breaches |
@@ -203,7 +214,7 @@ natively in Compose.
 - **Risk view** — a consolidated view of where your current posture stands.
 - **Final exam** — 100 dedicated questions, 30 minutes, pass 70/100, with
   question and option order jumbled on every take. Unlocks only after all
-  120 briefs are complete.
+  120 briefs are complete and at least 35% of the drills are done.
 - **Certificate** — unlocked by completing all briefs and passing the final
   exam. Download as PNG or PDF, or share it from the app. A self-paced
   on-device completion record, not an accredited qualification.
