@@ -1,5 +1,6 @@
 # AGENT-0
 
+[![Version: 2.0.0](https://img.shields.io/badge/Version-2.0.0-black.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform: Android](https://img.shields.io/badge/Platform-Android-3DDC84.svg)](https://developer.android.com)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.2.21-7F52FF.svg)](https://kotlinlang.org)
@@ -7,12 +8,15 @@
 [![minSdk](https://img.shields.io/badge/minSdk-24-brightgreen.svg)](app/build.gradle.kts)
 [![Offline](https://img.shields.io/badge/Offline-Zero%20permissions-black.svg)](app/src/main/AndroidManifest.xml)
 
-**An offline, native Android training program for operational security (OPSEC).**
+**An offline, native Android training program for operational security (OPSEC) —
+now a complete 16-chapter course.**
 
 Agent-0 turns OPSEC into a structured curriculum — not a reference dump. Learn the
 doctrine, practise decisions under pressure, test yourself, and audit your own
 habits, all in one monochrome, terminal-style app that never connects to the
-internet.
+internet. Version 2.0.0 is the full programme: 120 briefs, 338 scenario drills,
+648 questions, and 409 real case files, finished with a timed final exam and a
+certificate you actually earn.
 
 > **RULE 01 — You don't talk about this.**
 
@@ -20,6 +24,7 @@ internet.
 
 ## Contents
 
+- [What's new in 2.0](#whats-new-in-20)
 - [Why Agent-0](#why-agent-0)
 - [At a glance](#at-a-glance)
 - [What you will learn](#what-you-will-learn)
@@ -36,18 +41,50 @@ internet.
 
 ---
 
+## What's new in 2.0
+
+Version 2.0.0 completes the programme that 1.0.1 started. Everything from 1.0.1
+is still here, in the same order; 2.0 adds the second half and the finish line.
+
+- **Seven new chapters** — AI-Era OPSEC, Financial Privacy, Team/Workplace,
+  Incident Response, OSINT/Counter-OSINT, Travel/Borders, and a Capstone —
+  taking the course from 9 chapters and 49 briefs to **16 chapters and
+  120 briefs**.
+- **A real finish line** — a dedicated **100-question final exam** (30 minutes,
+  pass 70/100, question and option order jumbled on every take) that unlocks
+  only after all 120 briefs are complete. Pass it, and the app issues a
+  **certificate of completion** you can download as PNG or PDF and share.
+  It is a self-paced on-device record, not an accredited qualification, and it
+  never invents your name.
+- **Sequential locking** — the next brief unlocks only when the previous one is
+  complete, so the course is taken in order, the way it was designed.
+- **Brief Completion Hub** — after every brief, its question bank, drills,
+  linked cases with sources, and resources, in one place.
+- **Profile** — progress, bookmarks, per-brief notes, badges, and the
+  certificate, replacing the old top-level About.
+- **Illustrations for every brief** — runtime vector art in the monochrome
+  aesthetic, yellow only for warnings, red only for danger.
+- **Still zero permissions.** Still no network, no accounts, no analytics,
+  no ads. The guarantees did not move.
+
+See [CHANGELOG.md](CHANGELOG.md) for the full list.
+
+---
+
 ## Why Agent-0
 
 Most OPSEC advice is scattered: blog posts, checklists, and tools that each
 cover one corner of the problem. Agent-0 brings the discipline together:
 
-- **Structured learning** — eight chapters, graded Beginner → Advanced, so you
-  build understanding in order instead of collecting disconnected tips.
-- **Decision practice, not just reading** — branching scenario drills force a
-  choice, then show the consequence of that choice.
-- **Self-assessment** — a weighted diagnostic and a quiz bank with rationales,
-  so you can see where you are weak instead of guessing.
-- **Real-world grounding** — 59 documented breach case files and 67 vetted
+- **Structured learning** — sixteen chapters, graded Beginner → Advanced, so you
+  build understanding in order instead of collecting disconnected tips, with
+  sequential locking that keeps the order honest.
+- **Decision practice, not just reading** — 338 branching scenario drills force
+  a choice, then show the consequence of that choice.
+- **Self-assessment** — a weighted diagnostic, a 548-question practice bank
+  with rationales, and a 100-question timed final exam, so you can see where
+  you are weak instead of guessing — and prove it at the end.
+- **Real-world grounding** — 409 documented breach case files and 67 vetted
   external references, so the lessons are tied to failures that actually
   happened.
 - **Privacy as architecture, not policy** — the app declares zero Android
@@ -77,7 +114,7 @@ cover one corner of the problem. Agent-0 brings the discipline together:
 
 | | |
 |---|---|
-| **Version** | 1.0.0 (`versionCode` 1) |
+| **Version** | 2.0.0 (`versionCode` 3) |
 | **Platform** | Android 7.0+ (`minSdk` 24) |
 | **Language / UI** | Kotlin 2.2.21 · Jetpack Compose (BOM 2025.10.01) · Material 3 |
 | **Build** | Android Gradle Plugin 8.11.1 · Gradle 8.13 · JDK 17 |
@@ -92,12 +129,14 @@ cover one corner of the problem. Agent-0 brings the discipline together:
 
 | Subsystem | Volume |
 |---|---|
-| Chapters | 8, graded Beginner → Advanced |
-| Briefs (lessons) | 49, ~186 minutes total |
-| Scenario drills | 38 branching drills, every path verified reachable |
-| Quiz bank | 45 questions, each with a rationale |
+| Chapters | 16, graded Beginner → Advanced |
+| Briefs (lessons) | 120, ~483 minutes of new-chapter content on top of the 1.0.1 base |
+| Scenario drills | 338 branching drills, every path verified reachable |
+| Quiz bank | 548 practice questions, each with a rationale |
+| Final exam | 100 dedicated questions, 30 minutes, pass 70/100, jumbled every take |
+| Certificate | PNG/PDF download and share, unlocked by all briefs + exam pass |
 | Checklist items | 85, across 9 operational routines |
-| Case files | 59 documented breaches |
+| Case files | 409 documented breaches |
 | External references | 67 vetted links, plus 71 in-brief citations |
 | Self-diagnostic | 24 weighted controls |
 
@@ -115,6 +154,14 @@ cover one corner of the problem. Agent-0 brings the discipline together:
 | **CH-05 · Cognitive** | Biases, emotional exploitation, mental models, mindset |
 | **CH-06 · Identity** | Compartmentation, metadata, OSINT shadow, personas |
 | **CH-07 · Tradecraft** | Threat modelling, incident response, sustaining operations |
+| **CH-08 · Fieldcraft** | Putting it all together under real-world pressure |
+| **CH-09 · AI-Era OPSEC** | AI tools, prompts, and model-era exposure — defensive only |
+| **CH-10 · Financial Privacy** | Money trails, accounts, and routine financial hygiene |
+| **CH-11 · Team/Workplace** | OPSEC with colleagues, clients, and shared systems |
+| **CH-12 · Incident Response** | Contain, recover, and report — real-world help first |
+| **CH-13 · OSINT/Counter-OSINT** | Audit your own exposure; never turn techniques on others |
+| **CH-14 · Travel/Borders** | Devices, borders, and unfamiliar ground — general information, not legal advice |
+| **CH-15 · Capstone** | The full discipline, applied end to end |
 
 Each chapter is broken into short, hand-authored briefs. There are no bundled
 web pages and no WebView — the curriculum is written in Kotlin and rendered
@@ -128,13 +175,22 @@ natively in Compose.
 
 - **Chapter reader** — chapter list, chapter detail, and a brief reader with a
   dedicated block renderer for each lesson format.
+- **Sequential locking** — the next brief unlocks only when the previous one
+  is complete, so the course is taken in the order it was designed.
+- **Brief Completion Hub** — after each brief, its question bank
+  (tap-to-reveal answers), drills, linked cases with sources, and resources.
+- **Guided tour** — a skippable, replayable tour over the real screens after
+  onboarding.
+- **Profile** — progress, bookmarks, per-brief notes, badges, and the
+  certificate section.
 - **Unified search** — search across the curriculum from the home dashboard.
 
 ### Train
 
-- **Scenario drills** — branching decisions with verified-reachable paths.
+- **Scenario drills** — 338 branching decisions with verified-reachable paths.
   Wrong choices are instructive, not just marked wrong.
-- **Quiz** — 45 questions, each with a rationale explaining the answer.
+- **Quiz** — 548 practice questions, each with a rationale explaining the
+  answer, served only from briefs you have already completed.
 - **Checklists** — 85 items across 9 operational routines, for repeatable
   habits rather than one-off reading.
 - **Passphrase Lab** — practise passphrase thinking in memory only. Nothing
@@ -145,14 +201,20 @@ natively in Compose.
 - **Self-diagnostic** — 24 weighted controls, graded, so you can prioritise
   the gaps that matter most.
 - **Risk view** — a consolidated view of where your current posture stands.
+- **Final exam** — 100 dedicated questions, 30 minutes, pass 70/100, with
+  question and option order jumbled on every take. Unlocks only after all
+  120 briefs are complete.
+- **Certificate** — unlocked by completing all briefs and passing the final
+  exam. Download as PNG or PDF, or share it from the app. A self-paced
+  on-device completion record, not an accredited qualification.
 
 ### Reference
 
-- **Case archive** — 59 case files on real breaches, to study what failed and
+- **Case archive** — 409 case files on real breaches, to study what failed and
   why.
-- **Resource library** — 67 vetted external references. Links open in your
-  browser through the system chooser, so you always verify third-party sources
-  yourself.
+- **Resource library** — 67 vetted external references, organised
+  alphabetically by category. Links open in your browser through the system
+  chooser, so you always verify third-party sources yourself.
 
 ---
 
@@ -178,7 +240,17 @@ browser — not Agent-0 — makes the request, and you choose where it goes.
 
 ## Quick start
 
-### Option 1 — Build in the cloud with GitHub Actions (no setup)
+### Option 1 — Download the release (recommended)
+
+1. Open the repository on GitHub.
+2. Go to **Releases** and download the latest `Agent-0 v2.0.0` APK.
+3. Install it on your device.
+
+This is the signed release build (`com.abybijo.agent0`). The `-debug`
+prerelease next to it is a developer build (`com.abybijo.agent0.debug`) —
+end users should install the main release instead.
+
+### Option 2 — Build in the cloud with GitHub Actions (no setup)
 
 1. Open the repository on GitHub.
 2. Go to **Actions → Build Agent-0 APK → Run workflow**.
@@ -187,13 +259,13 @@ browser — not Agent-0 — makes the request, and you choose where it goes.
 This is the easiest route if you are building from a phone. The workflow is
 defined in [`.github/workflows/build.yml`](.github/workflows/build.yml).
 
-### Option 2 — Android Studio (recommended for development)
+### Option 3 — Android Studio (recommended for development)
 
 1. Clone the repository and open it in Android Studio (Koala or newer).
 2. Let Gradle sync — the wrapper is regenerated automatically.
 3. Press **Run**.
 
-### Option 3 — Build on your phone with AndroidIDE
+### Option 4 — Build on your phone with AndroidIDE
 
 See [`BUILDING_ON_ANDROID.md`](BUILDING_ON_ANDROID.md) for the full on-device
 guide.
@@ -254,13 +326,16 @@ com.abybijo.agent0
 ├── AppViewModel.kt            Progress state, strongly-typed flow combination
 ├── data/
 │   ├── Models.kt              Domain types (Chapter, Brief, Block, Scenario…)
-│   ├── Curriculum.kt          All 9 chapters / 49 briefs, hand-authored
-│   ├── Cases.kt               59 case studies
-│   ├── Scenarios.kt           38 branching drills
-│   ├── QuizBank.kt            45 questions + rationales
+│   ├── Curriculum*.kt         All 16 chapters / 120 briefs, hand-authored
+│   ├── BriefTemplates.kt      Shared brief sections (Introduction, Outcomes…)
+│   ├── Cases*.kt              409 case studies
+│   ├── Scenarios*.kt          338 branching drills
+│   ├── QuizBank*.kt           548 practice questions + rationales
+│   ├── QuizBankFinal.kt       100-question final exam bank (54 Advanced)
 │   ├── Checklists.kt          85 checklist items
 │   ├── Diagnostic.kt          24 weighted controls + grading
 │   ├── Resources.kt           67 external references
+│   ├── Progression.kt         Locking, completion, certificate gate
 │   └── Prefs.kt               DataStore persistence (the only I/O in the app)
 ├── nav/
 │   ├── Destinations.kt        Every route in one auditable file
@@ -270,12 +345,15 @@ com.abybijo.agent0
 │   ├── theme/                 Ink palette, mono typography, Motion tokens
 │   └── components/            Reveal primitives, surfaces, sigil, CRT backdrop
 └── feature/
-    ├── onboarding/            Boot sequence + 4-panel induction
+    ├── onboarding/            Boot sequence + 4-panel induction + guided tour
     ├── home/                  Dashboard + unified search
-    ├── chapters/              Chapter list, detail, brief reader, block renderer
-    ├── drills/                Quiz, scenarios, checklists, diagnostic, risk, lab
+    ├── chapters/              Chapter list, detail, brief reader, block renderer, Hub
+    ├── drills/                Quiz, final exam, scenarios, checklists, diagnostic, risk, lab
     ├── intel/                 Case archive, resource library
-    └── about/                 Credits, privacy statement, settings
+    ├── profile/               Profile, bookmarks, notes, badges, certificate panel
+    ├── certificate/           Certificate view, PNG/PDF rendering, share
+    ├── illustration/          Runtime vector illustrations per brief
+    └── about/                 Settings pages: About, About Developer
 ```
 
 ## Design system
@@ -284,8 +362,10 @@ The app deliberately avoids stock Material widgets so its monochrome terminal
 language stays consistent:
 
 - **Canvas** — pure black, white type, terminal monospace, Unicode glyphs
-  instead of icon assets. No colour appears anywhere; emphasis is carried by
-  luminance, weight, spacing, and motion.
+  instead of icon assets. The palette stays monochrome except for two
+  disciplined accents in illustrations: yellow only for warnings, red only
+  for danger. Emphasis is otherwise carried by luminance, weight, spacing,
+  and motion.
 - **Animation primitives** (`ui/components/Reveal.kt`):
   - `RevealIn` — staggered lift + fade, used by nearly every content block
   - `TypewriterText` — frame-driven character reveal with a trailing block cursor
